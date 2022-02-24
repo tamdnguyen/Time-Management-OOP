@@ -1,0 +1,13 @@
+Ability to name the activities freely and to choose the activity to start the timer for. The purpose of the timer is to stop on command, not after a set amount of time.
+
+The activities have a time evaluation (estimated duration for the task) which should be viewable if wanted ( e.g., by Finnish credits: 27h = 1 credit, by days: 24h = 1 day).
+
+The user can move to the next day on command.
+
+The program saves all time spent on activities and exports into a file. 
+
+Users can print the current day’s spent time and times saved into a file (the program needs to be able to read the file). 
+
+The print also shows used time in comparison to tasks’ time evaluation in percentage value (at least while printing from file).
+
+The program assumes when running that it has not been used before and starts a new day. The program only needs to read a file when previous time management data are printed, and even then it doesn’t have to seperate today’s saved data from previous saved data.
