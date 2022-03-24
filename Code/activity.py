@@ -1,5 +1,7 @@
 from timer import Timer
 from datetime import date
+from date import Date
+from time_conversion import TimeConversion
 
 
 class Activity:
@@ -11,7 +13,7 @@ class Activity:
         - The time counted of the activity
         - The date of the activity
 
-    See the documentation of Date and Timer
+    See the documentation of Timer
     """
     def __init__(self, name):
         """
@@ -20,11 +22,10 @@ class Activity:
         
         @parameter: 
             - name (string): name of the activity
-            - date (object Date()): the date of the activity
         """
         self.set_name(name)
         self._timer = Timer()
-        self._date = date.today()
+        self._date = Date.today()
 
     def set_name(self, name):
         """
@@ -57,6 +58,28 @@ class Activity:
         Return the activity date
         """
         return self._date
+
+    def set_time_format(self, format):
+        """
+        This method use TimeConversion class method to get the time format
+        :param format: integer [1,2,3,4]
+                format: 1 => hour_min_sec
+                        2 => min_sec
+                        3 => fin_ect
+                        4 => standard timedelta format
+        :return: a string with the desired format
+        """
+        time_conversion = TimeConversion(self.get_timer().duration)
+        if format == 1:
+            return time_conversion.hour_min_sec()
+        elif format == 2:
+            return time_conversion.min_sec()
+        elif format == 3:
+            return time_conversion.fin_etc()
+        elif format == 4:
+            return time_conversion.std_time()
+        else:
+            raise KeyError("Wrong key for activity time format")
 
     def __str__(self):
         return "{:10s}{}\n{:10s}{}\n{:10s}{}".format("Activity:", self.get_name(), 
