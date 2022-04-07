@@ -24,19 +24,21 @@ class TimeConversion:
         e.g., 5 hours, 40 minutes and 20 seconds => 05:40:20
         """
         time = ""
-        hour = self.time // self.HOUR
-        min = (self.time - self.HOUR * hour) // self.MINUTE
-        sec = self.time - self.HOUR * hour - self.MINUTE * min
+        hour = round(self.time // self.HOUR)
+        min = round((self.time - self.HOUR * hour) // self.MINUTE)
+        sec = round(self.time - self.HOUR * hour - self.MINUTE * min)
 
         if hour < 10:
             time += "0" + str(hour)
         else:
             time += str(hour)
+        time += ":"
 
         if min < 10:
             time += "0" + str(min)
         else:
             time += str(min)
+        time += ":"
 
         if sec < 10:
             time += "0" + str(sec)
@@ -51,13 +53,14 @@ class TimeConversion:
         e.g., 5 hours, 40 minutes and 20 seconds => 340:20
         """
         time = ""
-        min = self.time // self.MINUTE
-        sec = self.time - self.MINUTE * min
+        min = round(self.time // self.MINUTE)
+        sec = round(self.time - self.MINUTE * min)
 
         if min < 10:
             time += "0" + str(min)
         else:
             time += str(min)
+        time += ":"
 
         if sec < 10:
             time += "0" + str(sec)

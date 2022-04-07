@@ -16,9 +16,9 @@ def main():
     print(task)
 
     task.get_timer().start()
-    time.sleep(5)
+    time.sleep(70)
     print(task)
-    print(task.set_time_format(4))
+    print(task.set_time_format(1))
 
 
 main()

@@ -1,0 +1,24 @@
+# Functionality Checklist
+
+- Base classes:
+    - ~~Activity: task with input name, with time and date~~
+    - ~~Timer: keep track of the time~~
+    - ~~Date~~
+    - DayTask: to contain all the task, calculate the statistics for import/export file
+    - AllTask: the "main database" contains all the DayTask objects
+- Graphical interface
+- Creation of an activity based on user input (button on GUI)
+- Switching courses/replacing can be done with the graphical interface (Delete/Edit button)
+- The amount of added activities can be maxed out at 5
+- Taking time for activities
+- The activity that is being timed should be distinct 
+- Multitasking, multiple courses can be timed at the same timer
+- Picking a new activity to time interrupts and saves the previous activity’s timer
+- Timer’s time is shown on screen
+- Print time management data of current day
+- Print time management data from previous days from a file
+- Saving time management data into a file
+- Unit Tests for at least part of the program
+- Help function
+- Statistics for user data
+- Pomodoro reminder
