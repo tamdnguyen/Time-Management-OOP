@@ -75,7 +75,7 @@ class TimeConversion:
         e.g, 27h = 1 credit
                 100000 sec = 1,029 cre
         """
-        ect = self.time // self.FIN_ECTS
+        ect = self.time / self.FIN_ECTS
         return "{:.3f} ECTS".format(ect)
 
     def std_time(self):

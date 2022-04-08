@@ -55,7 +55,7 @@ class DayTask():
         else:
             return False
 
-    def data_for_statistic(self):
+    def data_for_time_statistic(self):
         """
         Return the list of tasks in the dictionary form
         

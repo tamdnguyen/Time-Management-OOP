@@ -1,9 +1,9 @@
 from time import time
 
 
-class Statistics:
+class TimeStatistics:
     """
-    The class Statistics calculates the statistics from the
+    The class TimeStatistics calculates the statistics from the
     time management data in a day.
 
     The statistics include:
