@@ -6,7 +6,7 @@ class DayTask():
 
     Main task of the class is to keep track of the amount of tasks added by the user and make sure that at most 5 tasks can be added simutaneously.
 
-    The import/export functionality can also be implemented here.
+    The export functionality can also be implemented here (only export, print the data of that date)
 
     Read the documentation of Activity and Timer
     """

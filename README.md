@@ -44,13 +44,15 @@ go to folder Code, run the file `main.py`
 ## What to do next?
 
 - [ ] Import/Export the time management data
-- [ ] Unittest
+- [x] ~~Unittest~~
 - [ ] GUI
 - [ ] Pomodoro and reminder to take a break
 - [ ] Moving to next day function [?]
+- [ ] Choose the day to show function
 - [ ] Loading a file to the program function [?]
+- [ ] Edit and Delete function
 
 
-Last update: 25.03.2022
+Last update: 10.04.2022
 
 Happy Learning! Cheers!
