@@ -10,26 +10,21 @@ class Activity:
     An activity has the information:
         - Activity name
         - The time counted of the activity
-        - The date of the activity
+        - The DayTask object which the activity belongs with
 
     See the documentation of Timer, DayTask
     """
-    def __init__(self, name=None, date=None):
+    def __init__(self, day_task, name=None):
         """
         Create a new activity with a given name from the user.
         
-        @parameter: 
+        @parameter:
+            - day_task (DayTask object): the day which the activity takes place
             - name (string): name of the activity
-            @important
-            - date (date object): the get_date() method of instance of class Day
-                e.g., in main, create an instance A of class Day, then create an instance B
-                of class Activity. The "date" parameter of instance B will be A.get_date()
-                A = Day("04.04.2022")
-                B = Activity("y2 project", A.get_date())
         """
         self.set_name(name)
         self._timer = Timer()
-        self.set_date(date)
+        self._day_task = day_task
 
     def set_name(self, name):
         """
@@ -44,19 +39,6 @@ class Activity:
             self._name = "Unknown activity"
         else:
             self._name = name
-
-    def set_date(self, date):
-        """
-        Sets the date of the activity.
-        If the given date is None, the date is set to Today
-
-        @parameter:
-            - date (date object)
-        """
-        if date == None or date == "":
-            self._date = Date.today()
-        else:
-            self._date = date
 
     def get_name(self):
         """
@@ -74,7 +56,7 @@ class Activity:
         """
         Return the activity date
         """
-        return self._date
+        return self._day_task.get_date()
 
     def set_time_format(self, format):
         """
