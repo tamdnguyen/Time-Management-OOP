@@ -1,10 +1,10 @@
 from ctypes import alignment
-import sys
 from tracemalloc import stop
 from PyQt5.QtWidgets import (
-    QWidget, QDesktopWidget, QApplication, QMessageBox, 
-    QPushButton, QLabel, QComboBox,
-    QGridLayout, QHBoxLayout, QVBoxLayout)
+    QWidget, QDesktopWidget, QMessageBox, 
+    QPushButton, QLabel, QMenu,
+    QGridLayout, QHBoxLayout, QVBoxLayout,
+    QInputDialog)
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt
 
@@ -53,7 +53,7 @@ class GUI(QWidget):
         """
         app_layout  = QVBoxLayout() # this is the outermost layout which contains every childLayout
 
-        title_layout = QHBoxLayout() # This is the first row in the designed UI, which has 3 columns: the button switch, activity date, button to add new task
+        title_layout = QHBoxLayout() # This is the first row in the designed UI, which has 3 columns: the button switch, activity date, button to add new activity
 
         activity_layout = QGridLayout() # This is the section for activities and their timer
 
@@ -80,89 +80,109 @@ class GUI(QWidget):
         """
         This method adds the widgets to the title section of the GUI
         """
-        # create the widgets
-        time_conversion = QPushButton("Time Conversion")
-        activity_date = QLabel("Current Activity Date")
-        add_task = QPushButton("Add Task")
+        # create the widgets and add the function for them
+        # TODO: add the action when user choose the item in the dropdown list
+        self.time_conversion = QPushButton("Time Conversion", self)
+        time_conversion_menu = QMenu(self)
+        time_conversion_menu.addAction("Hour:Min:Sec", lambda: self.activity_date.setText("<h1>H:M:S</h1>"))
+        time_conversion_menu.addAction("Min:Sec")
+        time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)")
+        time_conversion_menu.addAction("Standard Expression")
+        self.time_conversion.setMenu(time_conversion_menu)
+
+        # TODO: connect the text h1 below to the real date show of the DayTask
+        self.activity_date = QLabel("<h1>{:s}</h1>".format("Current Activity Date"), self)
+        
+        self.add_activity = QPushButton("Add Activity", self)
+        self.add_activity.clicked.connect(self.show_add_dialog)
 
         # add the widgets to the GUI Layout
-        title_layout.addWidget(time_conversion, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
-        title_layout.addWidget(activity_date, 4, alignment = Qt.AlignHCenter | Qt.AlignVCenter)
-        title_layout.addWidget(add_task, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        title_layout.addWidget(self.time_conversion, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
+        title_layout.addWidget(self.activity_date, 4, alignment = Qt.AlignHCenter | Qt.AlignVCenter)
+        title_layout.addWidget(self.add_activity, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
 
     def activity_widget(self, activity_layout):
         """
         This method adds the widgets to the activity section of the GUI
         """
         # create the widgets
-        task_1 = QLabel("Task 1")
-        task_1_time = QLabel("00:00:00")
-        task_2 = QLabel("Task 2")
-        task_2_time = QLabel("00:00:00")
-        task_3 = QLabel("Task 3")
-        task_3_time = QLabel("00:00:00")
-        task_4 = QLabel("Task 4")
-        task_4_time = QLabel("00:00:00")
-        task_5 = QLabel("Task 5")
-        task_5_time = QLabel("00:00:00")
+        # TODO: when change the setText() QLabel, use <h2> tag for these widgets
+        self.activity_1 = QLabel("Task 1", self)
+        self.activity_1_time = QLabel("00:00:00", self)
+        self.activity_2 = QLabel("Task 2", self)
+        self.activity_2_time = QLabel("00:00:00", self)
+        self.activity_3 = QLabel("Task 3", self)
+        self.activity_3_time = QLabel("00:00:00", self)
+        self.activity_4 = QLabel("Task 4", self)
+        self.activity_4_time = QLabel("00:00:00", self)
+        self.activity_5 = QLabel("Task 5", self)
+        self.activity_5_time = QLabel("00:00:00", self)
 
         # set the alignment to the center vertically and horizontally of the cell
         alignment = Qt.AlignHCenter | Qt.AlignVCenter
 
         # add the widgets to the GUI Layout
-        activity_layout.addWidget(task_1, 0, 0, alignment)
-        activity_layout.addWidget(task_1_time, 0, 1, alignment)
-        activity_layout.addWidget(task_2, 1, 0, alignment)
-        activity_layout.addWidget(task_2_time, 1, 1, alignment)
-        activity_layout.addWidget(task_3, 2, 0, alignment)
-        activity_layout.addWidget(task_3_time, 2, 1, alignment)
-        activity_layout.addWidget(task_4, 3, 0, alignment)
-        activity_layout.addWidget(task_4_time, 3, 1, alignment)
-        activity_layout.addWidget(task_5, 4, 0, alignment)
-        activity_layout.addWidget(task_5_time, 4, 1, alignment)
+        activity_layout.addWidget(self.activity_1, 0, 0, alignment)
+        activity_layout.addWidget(self.activity_1_time, 0, 1, alignment)
+        activity_layout.addWidget(self.activity_2, 1, 0, alignment)
+        activity_layout.addWidget(self.activity_2_time, 1, 1, alignment)
+        activity_layout.addWidget(self.activity_3, 2, 0, alignment)
+        activity_layout.addWidget(self.activity_3_time, 2, 1, alignment)
+        activity_layout.addWidget(self.activity_4, 3, 0, alignment)
+        activity_layout.addWidget(self.activity_4_time, 3, 1, alignment)
+        activity_layout.addWidget(self.activity_5, 4, 0, alignment)
+        activity_layout.addWidget(self.activity_5_time, 4, 1, alignment)
 
     def mainbutton_widget(self, mainbutton_layout):
         """
         This method adds the widgets to the main button section of the GUI
         """
         # create the widgets
-        start_btn = QPushButton("Start")
-        stop_btn = QPushButton("Stop")
-        reset_btn = QPushButton("Reset")
-        pomodoro_btn = QPushButton("Pomodoro")
-        stats_btn = QPushButton("Statistics")
+        self.start_btn = QPushButton("Start", self)
+        self.stop_btn = QPushButton("Stop", self)
+        self.reset_btn = QPushButton("Reset", self)
+        self.edit_btn = QPushButton("Edit", self)
+        self.stats_btn = QPushButton("Statistics", self)
 
         # set the alignment to the center vertically and horizontally of the cell
         alignment = Qt.AlignHCenter | Qt.AlignVCenter
 
         # add the widgets to the GUI Layout
-        mainbutton_layout.addWidget(start_btn, alignment)
-        mainbutton_layout.addWidget(stop_btn, alignment)
-        mainbutton_layout.addWidget(reset_btn, alignment)
-        mainbutton_layout.addWidget(pomodoro_btn, alignment)
-        mainbutton_layout.addWidget(stats_btn, alignment)
+        mainbutton_layout.addWidget(self.start_btn, alignment)
+        mainbutton_layout.addWidget(self.stop_btn, alignment)
+        mainbutton_layout.addWidget(self.reset_btn, alignment)
+        mainbutton_layout.addWidget(self.edit_btn, alignment)
+        mainbutton_layout.addWidget(self.stats_btn, alignment)
 
     def otherbutton_widget(self, otherbutton_layout):
         """
         This method adds the widgets to the other button section of the GUI
         """
         # create the widgets
-        show_day_btn = QPushButton("Choose Day")
-        next_day_btn = QPushButton("Next Day")
-        export_btn = QPushButton("Export")
-        import_btn = QPushButton("Import")
-        help_btn = QPushButton("Need help?")
+        self.export_btn = QPushButton("Export", self)
+        self.import_btn = QPushButton("Import", self)
+        self.next_day_btn = QPushButton("Next Day", self)
+        self.pomodoro_btn = QPushButton("Pomodoro", self)
+        self.help_btn = QPushButton("Need help?", self)
 
         # set the alignment to the center vertically and horizontally of the cell
         alignment = Qt.AlignHCenter | Qt.AlignVCenter
 
         # add the widgets to the GUI Layout
-        otherbutton_layout.addWidget(show_day_btn, alignment)
-        otherbutton_layout.addWidget(next_day_btn, alignment)
-        otherbutton_layout.addWidget(export_btn, alignment)
-        otherbutton_layout.addWidget(import_btn, alignment)
-        otherbutton_layout.addWidget(help_btn, alignment)
+        otherbutton_layout.addWidget(self.export_btn, alignment)
+        otherbutton_layout.addWidget(self.import_btn, alignment)
+        otherbutton_layout.addWidget(self.next_day_btn, alignment)
+        otherbutton_layout.addWidget(self.pomodoro_btn, alignment)
+        otherbutton_layout.addWidget(self.help_btn, alignment)
 
+    def show_add_dialog(self):
+        """
+        This method shows a pop up windows to ask for the name of the activity"""
+        text, ok = QInputDialog.getText(self, 'Activity Name',
+                                        'Enter activity name:')
+
+        if ok:
+            self.activity_1.setText(str(text))
 
     def closeEvent(self, event):
         """
@@ -187,12 +207,3 @@ class GUI(QWidget):
         self.move(qr.topLeft())
 
 
-def main():
-
-    app = QApplication(sys.argv)
-    gui = GUI()
-    sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()

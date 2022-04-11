@@ -1,4 +1,6 @@
-# IMPORTANT!!!! USING QLabel for show info
+# IMPORTANT!!!! Add the function in DayTask to show the time_conversion for all the activities of that DayTask (for loop to iterate through the activities in the list)
+
+# Can use QComboBox for the time_conversion button
 
 # Create the help function for app
 
@@ -98,3 +100,4 @@ Links:
 - https://www.pythonguis.com/tutorials/creating-multiple-windows/
 
 # Edit and Delete function
+

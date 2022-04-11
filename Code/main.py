@@ -1,24 +1,13 @@
-from activity import Activity
-import time
-
+import sys
+from gui import GUI
+from PyQt5.QtWidgets import QApplication
 
 def main():
-    name = str(input("Enter task name\n"))
-    task = Activity(name)
-    print(task)
 
-    time.sleep(10)
-    print(task)
-
-    task.get_timer().stop()
-    print(task)
-    time.sleep(5)
-    print(task)
-
-    task.get_timer().start()
-    time.sleep(70)
-    print(task)
-    print(task.set_time_format(1))
+    app = QApplication(sys.argv)
+    gui = GUI()
+    sys.exit(app.exec_())
 
 
-main()
+if __name__ == '__main__':
+    main()
