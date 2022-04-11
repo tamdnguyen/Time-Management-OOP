@@ -1,6 +1,6 @@
 from activity import Activity
 import time
-from timer2 import Timer2
+from timer import Timer
 
 
 def main():
@@ -23,8 +23,8 @@ def main():
 
 
 def test_timer2():
-    timer = Timer2()
-    timer2 = Timer2(5)
+    timer = Timer()
+    timer2 = Timer(5)
     timer.start()
     timer2.start()
 

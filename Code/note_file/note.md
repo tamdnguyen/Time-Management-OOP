@@ -99,5 +99,5 @@ Links:
 
 - https://www.pythonguis.com/tutorials/creating-multiple-windows/
 
-# Edit and Delete function
+# Add a pop up note for Export function about "Export file is in CSV type and best viewed with Excel. For visualizing data use Stats function of the program instead"
 

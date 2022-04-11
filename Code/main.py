@@ -11,9 +11,9 @@ def main():
 
     today_day_task = DayTask(Date.today())
 
-    activity_1 = Activity("activity_1")
-    activity_2 = Activity("activity_2")
-    activity_3 = Activity("activity_3")
+    activity_1 = Activity("activity_1", 10.9098)
+    activity_2 = Activity("activity_2", 1)
+    activity_3 = Activity("activity_3", 1)
 
     today_day_task.add_activities(activity_1)
     today_day_task.add_activities(activity_2)
@@ -22,7 +22,7 @@ def main():
     print(activity_3)
     activity_3.get_timer().start()
     sleep(5)
-    print(activity_3)
+    print(activity_3) 
 
     today_day_task.export_data()
 

@@ -1,4 +1,5 @@
 import csv
+from time_statistics import TimeStatistics
 
 
 class DayTask():
@@ -26,6 +27,7 @@ class DayTask():
         """
         self._activities = []
         self._date = date
+        self._statistics = TimeStatistics(self.data_for_time_statistic())
 
     def get_activities(self):
         """
@@ -38,6 +40,9 @@ class DayTask():
         Return the date of that day
         """
         return self._date
+
+    def get_statistics(self):
+        return self._statistics
 
     def add_activities(self, activity):
         """
@@ -94,12 +99,14 @@ class DayTask():
         """
         This method creates a CSV file of the time management data of class DayTask
         """
+        csv_message = ["NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data", " please use Stats button in the app instead."]
         csv_header = ["Activity", "Time (in second)"]
         date = self.get_date()
         file_path = "time-management-oop/Code/time_data/" + str(date) + ".csv"
 
         with open(file_path, "w") as csv_file:
             writer = csv.writer(csv_file)
+            writer.writerow(csv_message)
             writer.writerow(csv_header)
             for key, value in self.data_for_time_statistic().items():
                 writer.writerow([key, value])

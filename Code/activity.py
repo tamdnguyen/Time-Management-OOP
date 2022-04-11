@@ -13,7 +13,7 @@ class Activity:
 
     See the documentation of Timer, DayTask
     """
-    def __init__(self, name=None):
+    def __init__(self, name=None, timerCountFrom=0):
         """
         Create a new activity with a given name from the user.
         
@@ -22,7 +22,7 @@ class Activity:
             - name (string): name of the activity
         """
         self.set_name(name)
-        self._timer = Timer()
+        self._timer = Timer(timerCountFrom)
         self._dayTask = None
 
     def set_name(self, name):

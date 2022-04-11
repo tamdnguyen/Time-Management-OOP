@@ -45,12 +45,12 @@ go to folder Code, run the file `main.py`
 
 - [ ] Import/Export the time management data
 - [x] ~~Unittest~~
-- [ ] GUI
-- [ ] Pomodoro and reminder to take a break
+- [ ] GUI | Connect to the backend + Main workflow
+- [ ] Pomodoro and reminder to take a break | Modify the return and workflow
 - [ ] Moving to next day function [?]
 - [ ] Choose the day to show function
 - [ ] Loading a file to the program function [?]
-- [ ] Edit and Delete function
+- [x] ~~Edit and Delete function~~
 
 
 Last update: 10.04.2022
