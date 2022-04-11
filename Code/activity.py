@@ -13,7 +13,7 @@ class Activity:
 
     See the documentation of Timer, DayTask
     """
-    def __init__(self, day_task, name=None):
+    def __init__(self, name=None):
         """
         Create a new activity with a given name from the user.
         
@@ -23,7 +23,7 @@ class Activity:
         """
         self.set_name(name)
         self._timer = Timer()
-        self._day_task = day_task
+        self._dayTask = None
 
     def set_name(self, name):
         """
@@ -51,11 +51,26 @@ class Activity:
         """
         return self._timer
 
+    def get_day(self):
+        """
+        Return the dayTask object that contains this activity
+        """
+        return self._dayTask
+
     def get_date(self):
         """
         Return the activity date
         """
-        return self._day_task.get_date()
+        return self.get_day().get_date()
+
+    def set_dayTask(self, dayTask):
+        dayTask_activities_num = len(dayTask.get_activities())
+
+        if dayTask_activities_num >= dayTask.MAX:
+            return False
+        else:
+            self._dayTask = dayTask
+            return True
 
     def set_time_format(self, format):
         """

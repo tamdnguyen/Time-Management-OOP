@@ -13,4 +13,4 @@ class Date(date):
         Return the date in format DD.MM.YYYY
         e.g. 24th March 2022 => 24.03.2022
         """
-        return self.strftime("%d.%m.%Y")
+        return self.strftime("%d-%m-%Y")

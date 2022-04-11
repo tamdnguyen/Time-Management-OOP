@@ -8,6 +8,7 @@ class Timer:
     def __init__(self):
         self._start = time.time()
         self._end = None
+        self.stop()
 
     @property
     def duration(self):

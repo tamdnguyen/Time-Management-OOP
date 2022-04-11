@@ -1,3 +1,6 @@
+import csv
+
+
 class DayTask():
     """
     The class AllTask represents the "brain" of the program. The information displayed on the GUI can be access from this class.
@@ -24,7 +27,7 @@ class DayTask():
         self._activities = []
         self._date = date
 
-    def get_actitivies(self):
+    def get_activities(self):
         """
         Return the activities list in that day
         """
@@ -47,10 +50,25 @@ class DayTask():
             - True if added successfully
             - False if the activity can't be added
         """
-        activities_num = len(self.get_activities())
-
-        if activities_num <= self.MAX:
+        if activity.set_dayTask(self):
             self.get_activities().append(activity)
+            return True
+        else:
+            return False
+
+    def delete_activities(self, activity):
+        """
+        Delete the input activity from the activities list.
+        
+        @parameter:
+            - activity: the activity to be deleted
+        
+        Return:
+            - True if in the list and deleted successfully
+            - False if not in the list"""
+
+        if activity in self.get_activities():
+            self.get_activities().remove(activity)
             return True
         else:
             return False
@@ -63,7 +81,7 @@ class DayTask():
             dictionary with key-value is task_name-task_timer
         """
         day_data = {}
-        activities_list = self.get_actitivies()
+        activities_list = self.get_activities()
         for activity in activities_list:
             name = activity.get_name()
             time = activity.get_timer()
@@ -72,4 +90,16 @@ class DayTask():
         
         return day_data
     
+    def export_data(self):
+        """
+        This method creates a CSV file of the time management data of class DayTask
+        """
+        csv_header = ["Activity", "Time (in second)"]
+        date = self.get_date()
+        file_path = "time-management-oop/Code/time_data/" + str(date) + ".csv"
 
+        with open(file_path, "w") as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(csv_header)
+            for key, value in self.data_for_time_statistic().items():
+                writer.writerow([key, value])
