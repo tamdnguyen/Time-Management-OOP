@@ -1,13 +1,13 @@
 import time
 
 
-class Timer:
+class Timer2:
     """
     The class Timer represents a digital clock to count the time of the activity
     """
-    def __init__(self, countFrom = 0):
-        self._countFrom = countFrom
-        self._start = time.time() - self.countFrom
+    def __init__(self, startingTime=0):
+        self._statingTime = startingTime
+        self._start = time.time() - self.startingTime
         self._end = None
         self.stop()
 
@@ -29,14 +29,8 @@ class Timer:
         return not self._end
 
     @property
-    def countFrom(self):
-        """
-        Return the countFrom value (from what value the timer counts)
-
-        This countFrom value is for the reading/importing file. When reading/importing
-        file, the timer will have some predefined value (e.g., the timer has counted 2 hours before, so we need to continue counting from that value)
-        """
-        return self._countFrom
+    def startingTime(self):
+        return self._statingTime
 
     def start(self):
         """
