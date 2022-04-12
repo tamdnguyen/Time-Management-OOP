@@ -1,6 +1,5 @@
 import csv
-from time_statistics import TimeStatistics
-
+from activity import Activity
 
 class DayTask():
     """
@@ -27,7 +26,6 @@ class DayTask():
         """
         self._activities = []
         self._date = date
-        self._statistics = TimeStatistics(self.data_for_time_statistic())
         self._allTask = None
 
     def get_activities(self):
@@ -41,9 +39,6 @@ class DayTask():
         Return the date of that day
         """
         return self._date
-
-    def get_statistics(self):
-        return self._statistics
 
     def set_allTask(self, allTask):
         if allTask.existed(self)[0]:
@@ -97,7 +92,7 @@ class DayTask():
         activities_list = self.get_activities()
         for activity in activities_list:
             name = activity.get_name()
-            time = activity.get_timer()
+            time = activity.get_timer().duration
 
             day_data[name] = time
         
@@ -107,12 +102,12 @@ class DayTask():
         """
         This method creates a CSV file of the time management data of class DayTask
         """
-        csv_message = ["NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data", " please use Stats button in the app instead."]
+        csv_message = ["NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data", " please use Stats button in the app instead. WARNING: DO NOT edit the exported CSV file!"]
         csv_header = ["Activity", "Time (in second)"]
         date = self.get_date()
         file_path = "time-management-oop/Code/time_data/" + str(date) + ".csv"
 
-        with open(file_path, "w") as csv_file:
+        with open(file_path, "w", newline="") as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(csv_message)
             writer.writerow(csv_header)
@@ -123,27 +118,19 @@ class DayTask():
         """
         This method reads a CSV file of a class DayTaskand creates the DayTask, Activity objects
         according to the data in the CSV file
-        
-        TODO: handle file exception
         """
         try:
             file = open(filename, "r")
             linelist = file.readlines()
             file.close()
 
-            date_file = str(filename)[0:-4] # extract the date of the DayTask object
-
-            dayTask = DayTask()
-
-            for line in linelist[2:]:
+            for line in linelist[2:-1]:
                 line = line.strip()
                 parts = line.split(",")
 
                 # TODO: run main to see if it is possible to create DayTask with string value like this
-                dayTask = DayTask(parts[0])
-                activity = Activity(parts[1], parts[2])
-                dayTask.add_activities(activity)
-                allTask.add_days(dayTask)
+                activity = Activity(parts[0], float(parts[1]))
+                self.add_activities(activity)
         except OSError:
             print("Invalid file")
             return 0

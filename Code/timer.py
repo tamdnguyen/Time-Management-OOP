@@ -6,7 +6,7 @@ class Timer:
     The class Timer represents a digital clock to count the time of the activity
     """
     def __init__(self, countFrom = 0):
-        self._countFrom = countFrom
+        self._countFrom = float(countFrom)
         self._start = time.time() - self.countFrom
         self._end = None
         self.stop()

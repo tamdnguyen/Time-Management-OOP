@@ -7,11 +7,6 @@ class Date(date):
 
     It returns the date in format that is Finnish familiarized.
     """
-    def __init__(self, time_expression=None):
-        super().__init__()
-        self.time_expression = time_expression
-        
-
     def __str__(self):
         """
         Return the date in format DD.MM.YYYY

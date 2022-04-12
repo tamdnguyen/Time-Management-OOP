@@ -99,5 +99,5 @@ Links:
 
 - https://www.pythonguis.com/tutorials/creating-multiple-windows/
 
-# Add a pop up note for Export function about "Export file is in CSV type and best viewed with Excel. For visualizing data use Stats function of the program instead"
+# Add a pop up note for Export function about "Export file is in CSV type and best viewed with Excel. For visualizing data use Stats function of the program instead. WARNING: DO NOT edit the exported CSV file!"
 

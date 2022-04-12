@@ -19,6 +19,8 @@ class TimeStatistics:
             - pie chart
             - bar chart
 
+    Usage: TimeStatistics(DayTask_object.data_for_time_statistic())
+    
     See the document of DayTask
     """
     def __init__(self, data):

@@ -25,7 +25,7 @@ def main():
     sleep(5)
     print(activity_3)
 
-
+    today_day_task.export_data()
 
     app = QApplication(sys.argv)
     gui = GUI()

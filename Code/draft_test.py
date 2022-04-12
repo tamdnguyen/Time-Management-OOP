@@ -1,6 +1,10 @@
+from fileinput import filename
+from sqlite3 import DatabaseError
 from activity import Activity
 import time
 from timer import Timer
+from day_task import DayTask
+from date_generator import DateGenerator
 
 
 def main():
@@ -50,4 +54,19 @@ def test_timer2():
     print(timer)
     print(timer2)
 
-test_timer2()
+
+def test_import_date():
+    filename = "13-04-2022.csv"
+    file_path = "time-management-oop/Code/time_data/" + filename
+
+    dayTask = DayTask(DateGenerator(filename))
+
+    print(dayTask)
+
+    dayTask.import_date(file_path)
+    print(dayTask.get_activities())
+
+    for activity in dayTask.get_activities():
+        print(activity)
+
+test_import_date()
