@@ -13,7 +13,6 @@ class DateGenerator:
     """
     def __init__(self, time_expression):
         self._time_expression = time_expression
-        self.create_date()
 
     @property
     def time_expression(self):

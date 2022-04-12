@@ -41,11 +41,15 @@ class DayTask():
         return self._date
 
     def set_allTask(self, allTask):
+        """
+        This methods check if the DayTask object (self) have existed and can be added to the given AllTask object or not
+        
+        """
         if allTask.existed(self)[0]:
-            return False
+            return False, allTask.existed(self)[1]
         else:
             self._allTask = allTask
-            return True
+            return True, allTask.existed(self)[1]
 
     def add_activities(self, activity):
         """
@@ -124,7 +128,7 @@ class DayTask():
             linelist = file.readlines()
             file.close()
 
-            for line in linelist[2:-1]:
+            for line in linelist[2:]:
                 line = line.strip()
                 parts = line.split(",")
 

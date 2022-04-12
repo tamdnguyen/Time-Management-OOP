@@ -1,9 +1,8 @@
-from fileinput import filename
-from sqlite3 import DatabaseError
 from activity import Activity
 import time
 from timer import Timer
 from day_task import DayTask
+from all_task import AllTask
 from date_generator import DateGenerator
 
 
@@ -69,4 +68,18 @@ def test_import_date():
     for activity in dayTask.get_activities():
         print(activity)
 
-test_import_date()
+def test_import_file():
+    file_path = "time-management-oop/Code/time_data/all_data.csv"
+
+    allTask = AllTask()
+    
+    allTask.import_file(file_path)
+    print(allTask.get_days())
+
+    for dayTask in allTask.get_days():
+        print(dayTask)
+        print(dayTask.get_activities())
+        for activity in dayTask.get_activities():
+            print(activity)
+
+test_import_file()

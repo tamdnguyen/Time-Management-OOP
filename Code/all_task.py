@@ -30,16 +30,19 @@ class AllTask():
         """
         Add the days to the container if the date of the DayTask object has not existed in the list
         """
-        if day.set_allTask(self):
+        if day.set_allTask(self)[0]:
             self._days.append(day)
+            return day
+        else:
+            return day.set_allTask(self)[1]
+            
 
     def existed(self, day):
         """
-        Check if the created day is already in the DayTask or not
-        (if yes, then it means that the day has been created before, so we will
-        continue our program with the data of that day instead of creating a new day)
+        Check if the given day is already in the AllTask list or not
+        (if yes, then it means that the day has been created before, so we will continue our program with the data of that day instead of creating a new day)
 
-        We check is by comparing the date of 2 the DayTask object "day" vs the DayTasks object
+        We check by comparing the date of 2 the DayTask object "day" vs the DayTasks objects
         in the list of the class AllTask
         
         Return
@@ -59,7 +62,7 @@ class AllTask():
         csv_header = ["Date", "Activity", "Time (in second)"]
         file_path = "time-management-oop/Code/time_data/all_data.csv"
 
-        with open(file_path, "w") as csv_file:
+        with open(file_path, "w", newline="") as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(csv_message)
             writer.writerow(csv_header)
@@ -77,8 +80,7 @@ class AllTask():
             file = open(filename, "r")
             linelist = file.readlines()
             file.close()
-
-            allTask = AllTask()
+            print(linelist)
 
             for line in linelist[2:]:
                 line = line.strip()
@@ -87,8 +89,9 @@ class AllTask():
                 # TODO: run main to see if it is possible to create DayTask with string value like this
                 dayTask = DayTask(parts[0])
                 activity = Activity(parts[1], parts[2])
-                dayTask.add_activities(activity)
-                allTask.add_days(dayTask)
+
+                final_dayTask_in_AllTask = self.add_days(dayTask)
+                final_dayTask_in_AllTask.add_activities(activity)
         except OSError:
             print("Invalid file")
             return 0
