@@ -119,3 +119,31 @@ class DayTask():
             for key, value in self.data_for_time_statistic().items():
                 writer.writerow([key, value])
 
+    def import_date(self, filename):
+        """
+        This method reads a CSV file of a class DayTaskand creates the DayTask, Activity objects
+        according to the data in the CSV file
+        
+        TODO: handle file exception
+        """
+        try:
+            file = open(filename, "r")
+            linelist = file.readlines()
+            file.close()
+
+            date_file = str(filename)[0:-4] # extract the date of the DayTask object
+
+            dayTask = DayTask()
+
+            for line in linelist[2:]:
+                line = line.strip()
+                parts = line.split(",")
+
+                # TODO: run main to see if it is possible to create DayTask with string value like this
+                dayTask = DayTask(parts[0])
+                activity = Activity(parts[1], parts[2])
+                dayTask.add_activities(activity)
+                allTask.add_days(dayTask)
+        except OSError:
+            print("Invalid file")
+            return 0
