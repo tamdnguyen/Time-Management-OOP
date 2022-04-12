@@ -28,6 +28,7 @@ class DayTask():
         self._activities = []
         self._date = date
         self._statistics = TimeStatistics(self.data_for_time_statistic())
+        self._allTask = None
 
     def get_activities(self):
         """
@@ -43,6 +44,13 @@ class DayTask():
 
     def get_statistics(self):
         return self._statistics
+
+    def set_allTask(self, allTask):
+        if allTask.existed(self)[0]:
+            return False
+        else:
+            self._allTask = allTask
+            return True
 
     def add_activities(self, activity):
         """
@@ -110,3 +118,4 @@ class DayTask():
             writer.writerow(csv_header)
             for key, value in self.data_for_time_statistic().items():
                 writer.writerow([key, value])
+

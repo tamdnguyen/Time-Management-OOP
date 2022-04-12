@@ -6,6 +6,7 @@ from day_task import DayTask
 from datetime import date
 from activity import Activity
 from date import Date
+from all_task import AllTask
 
 def main():
 
@@ -22,9 +23,9 @@ def main():
     print(activity_3)
     activity_3.get_timer().start()
     sleep(5)
-    print(activity_3) 
+    print(activity_3)
 
-    today_day_task.export_data()
+
 
     app = QApplication(sys.argv)
     gui = GUI()
