@@ -20,10 +20,11 @@ class DateGenerator:
         return self._time_expression
 
     def create_date(self):
-        time_expression = str(self.time_expression)
-        day = int(time_expression[0:2])
-        month = int(time_expression[3:5])
-        year = int(time_expression[6:10])
+        time_expression = str(self.time_expression)[0:-4]
+        date_data  = time_expression.split("-")
+        day = int(date_data[0])
+        month = int(date_data[1])
+        year = int(date_data[2])
 
         corresponding_date = Date(year, month, day)
 
