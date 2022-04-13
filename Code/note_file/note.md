@@ -101,3 +101,8 @@ Links:
 
 # Add a pop up note for Export function about "Export file is in CSV type and best viewed with Excel. For visualizing data use Stats function of the program instead. WARNING: DO NOT edit the exported CSV file!"
 
+# Save file when exit:
+
+The beginning of the link:
+https://doc.qt.io/qt-5/qmessagebox.html
+

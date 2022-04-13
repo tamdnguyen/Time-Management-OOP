@@ -64,7 +64,7 @@ class Activity:
         return self.get_day().get_date()
 
     def set_dayTask(self, dayTask):
-        dayTask_activities_num = len(dayTask.get_activities())
+        dayTask_activities_num = dayTask.get_len()
 
         if dayTask_activities_num >= dayTask.MAX:
             return False

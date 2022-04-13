@@ -34,6 +34,9 @@ class DayTask():
         """
         return self._activities
 
+    def get_len(self):
+        return len(self.get_activities())
+
     def get_date(self):
         """
         Return the date of that day
@@ -135,7 +138,6 @@ class DayTask():
                 line = line.strip()
                 parts = line.split(",")
 
-                # TODO: run main to see if it is possible to create DayTask with string value like this
                 activity = Activity(parts[0], float(parts[1]))
                 self.add_activities(activity)
         except OSError:

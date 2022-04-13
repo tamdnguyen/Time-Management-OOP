@@ -57,6 +57,7 @@ go to folder Code, run the file `main.py`
 
 At the moment, the app still has some small limitations that can be noticed during the use (it does not work perfectly as the apps on the market). However, many improvements can be made to the app in the future. Some of the limitations that have been noticed so far include:
 - User creates 2 activities with the same name is now still possible in the app. One improvement can be creating a pop up windows to ask if the person wants to rename the activity or not.
+- User cannot hold and change the position of the activities in the GUI
 
 ## Reference
 

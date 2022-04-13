@@ -10,6 +10,7 @@ from all_task import AllTask
 from date_generator import DateGenerator
 
 def main():
+    
     allTask = AllTask()
 
     today_day_task = DayTask(Date.today())
@@ -22,7 +23,7 @@ def main():
     today_day_task.add_activities(activity_2)
     today_day_task.add_activities(activity_3)
 
-    tomorrow_day_task = DayTask(DateGenerator("14-04-2022.csv").create_date())
+    tomorrow_day_task = DayTask(DateGenerator("14-04-2022.csv"[:-4]).create_date())
     activity_4 = Activity("activity_4", 10.09203)
     activity_5 = Activity("activity_5", 100)
     activity_6 = Activity("activity_6")
@@ -43,11 +44,10 @@ def main():
     allTask.add_days(today_day_task)
     allTask.add_days(tomorrow_day_task)
 
-    allTask.export_file()
-
     app = QApplication(sys.argv)
     gui = GUI(tomorrow_day_task)
     sys.exit(app.exec_())
+    
 
 
 if __name__ == '__main__':

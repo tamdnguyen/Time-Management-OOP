@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QInputDialog)
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, QTimer
+from activity import Activity
 
 
 class GUI(QWidget):
@@ -29,6 +30,7 @@ class GUI(QWidget):
         # self.timer.timeout.connect(self.show_time())
         # self.timer.start(1000) # Update the time on the screen after every second
 
+
     def init_windows(self):
         """
         This method set the windows of the app
@@ -39,6 +41,7 @@ class GUI(QWidget):
 
         self.setWindowTitle('Time Management App')
         self.show()
+
 
     def layout(self):
         """
@@ -80,30 +83,30 @@ class GUI(QWidget):
         # TODO: add the action when user choose the item in the dropdown list
         self.time_conversion = QPushButton("Time Conversion", self)
         time_conversion_menu = QMenu(self)
-        time_conversion_menu.addAction("Hour:Min:Sec", lambda: self.activity_date.setText("<h1>H:M:S</h1>"))
+        time_conversion_menu.addAction("Hour:Min:Sec")
         time_conversion_menu.addAction("Min:Sec")
         time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)")
         time_conversion_menu.addAction("Standard Expression")
         self.time_conversion.setMenu(time_conversion_menu)
 
-        # TODO: connect the text h1 below to the real date show of the DayTask
-        print(str(self.dayTask.get_date()))
-        self.activity_date = QLabel("<h1>{:s}</h1>".format(str(self.dayTask.get_date())), self)
-        
-        self.add_activity = QPushButton("Add Activity", self)
-        self.add_activity.clicked.connect(self.show_add_dialog)
+        self.activity_date = QLabel(str(self.dayTask.get_date()), self)
+        self.activity_date.setStyleSheet('font-size: 18pt;')
+        self.add_activity_btn = QPushButton("Add Activity", self)
 
         # add the widgets to the GUI Layout
         title_layout.addWidget(self.time_conversion, 1, alignment=Qt.AlignLeft | Qt.AlignVCenter)
         title_layout.addWidget(self.activity_date, 4, alignment = Qt.AlignHCenter | Qt.AlignVCenter)
-        title_layout.addWidget(self.add_activity, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        title_layout.addWidget(self.add_activity_btn, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+
+        # add the actions for the widgets
+        self.add_activity_btn.clicked.connect(self.add_activity)
+
 
     def activity_widget(self, activity_layout):
         """
         This method adds the widgets to the activity section of the GUI
         """
         # create the widgets
-        # TODO: when change the setText() QLabel, use <h2> tag for these widgets
         self.activity_1 = QLabel("Task 1", self)
         self.activity_1_time = QLabel("00:00:00", self)
         self.activity_2 = QLabel("Task 2", self)
@@ -114,6 +117,18 @@ class GUI(QWidget):
         self.activity_4_time = QLabel("00:00:00", self)
         self.activity_5 = QLabel("Task 5", self)
         self.activity_5_time = QLabel("00:00:00", self)
+
+        # change the font-size of the label
+        self.activity_1.setStyleSheet('font-size: 14pt;')
+        self.activity_2.setStyleSheet('font-size: 14pt;')
+        self.activity_3.setStyleSheet('font-size: 14pt;')
+        self.activity_4.setStyleSheet('font-size: 14pt;')
+        self.activity_5.setStyleSheet('font-size: 14pt;')
+        self.activity_1_time.setStyleSheet('font-size: 14pt;')
+        self.activity_2_time.setStyleSheet('font-size: 14pt;')
+        self.activity_3_time.setStyleSheet('font-size: 14pt;')
+        self.activity_4_time.setStyleSheet('font-size: 14pt;')
+        self.activity_5_time.setStyleSheet('font-size: 14pt;')
 
         # set the alignment to the center vertically and horizontally of the cell
         alignment = Qt.AlignHCenter | Qt.AlignVCenter
@@ -129,6 +144,7 @@ class GUI(QWidget):
         activity_layout.addWidget(self.activity_4_time, 3, 1, alignment)
         activity_layout.addWidget(self.activity_5, 4, 0, alignment)
         activity_layout.addWidget(self.activity_5_time, 4, 1, alignment)
+
 
     def mainbutton_widget(self, mainbutton_layout):
         """
@@ -151,6 +167,7 @@ class GUI(QWidget):
         mainbutton_layout.addWidget(self.edit_btn, alignment)
         mainbutton_layout.addWidget(self.stats_btn, alignment)
 
+
     def otherbutton_widget(self, otherbutton_layout):
         """
         This method adds the widgets to the other button section of the GUI
@@ -172,27 +189,54 @@ class GUI(QWidget):
         otherbutton_layout.addWidget(self.pomodoro_btn, alignment)
         otherbutton_layout.addWidget(self.help_btn, alignment)
 
-    def show_add_dialog(self):
+
+    def add_activity(self):
         """
-        This method shows a pop up windows to ask for the name of the activity"""
-        text, ok = QInputDialog.getText(self, 'Activity Name',
+        This method shows a pop up windows to ask for the name of the activity and create new activity for the program
+        """
+        # this dictionary maps the activities in the DayTask list to the widget in the frontend GUI
+        gui_frontend_dict = {0: [self.activity_1, self.activity_1_time], 
+                            1: [self.activity_2, self.activity_2_time], 
+                            2: [self.activity_3, self.activity_3_time], 
+                            3: [self.activity_4, self.activity_4_time], 
+                            4: [self.activity_5, self.activity_5_time]}
+        
+        widget_index = self.dayTask.get_len()
+
+        activity_name, ok = QInputDialog.getText(self, 'Activity Name',
                                         'Enter activity name:')
 
         if ok:
-            self.activity_1.setText(str(text))
+            activity = Activity(activity_name)
+
+            if self.dayTask.add_activities(activity):
+                widget_name_connected = gui_frontend_dict[widget_index][0]
+                widget_time_connected = gui_frontend_dict[widget_index][1]
+                widget_name_connected.setText(activity_name)
+                widget_time_connected.setText(activity.set_time_format(1))
+            else:
+                warning_box = QMessageBox()
+                warning_box.setIcon(QMessageBox.Warning)
+                warning_box.setWindowTitle("Adding new activity failed")
+                warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.")
+                warning_box.exec()
+                
 
     def closeEvent(self, event):
         """
         This method confirms if the user wants to quit or not
+
+        TODO: Add a save button to export the data file like the Word exit
         """
         reply = QMessageBox.question(self, 'Message',
-                                     "Are you sure to quit?", QMessageBox.Yes |
+                                     "Save the time management data?", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
             event.accept()
         else:
             event.ignore()
+
 
     def center(self):
         """
@@ -202,6 +246,7 @@ class GUI(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
 
     def show_time(self):
         # TODO: add the method to update the labels which show time of the activities

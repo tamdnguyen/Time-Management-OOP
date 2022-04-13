@@ -84,7 +84,6 @@ class AllTask():
                 line = line.strip()
                 parts = line.split(",")
 
-                # TODO: run main to see if it is possible to create DayTask with string value like this
                 dayTask = DayTask(DateGenerator(parts[0]).create_date())
                 activity = Activity(parts[1], parts[2])
 
