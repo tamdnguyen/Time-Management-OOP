@@ -105,6 +105,8 @@ class GUI(QWidget):
     def activity_widget(self, activity_layout):
         """
         This method adds the widgets to the activity section of the GUI
+
+        TODO: Change the label to the real activities in DayTask
         """
         # create the widgets
         self.activity_1 = QLabel("Task 1", self)
@@ -220,7 +222,23 @@ class GUI(QWidget):
                 warning_box.setWindowTitle("Adding new activity failed")
                 warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.")
                 warning_box.exec()
-                
+    
+
+    def gui_backend_dict(self):
+        """
+        TODO: Figure out how to connect the activities in Daytask with the GUI widget
+        Then can modify the add_activity() method above to be smarter and more convenient.
+        In that way, widgets activity_* and activity_*_time can show the name and time of the activity
+        better, also change the time_conversion value can be easier than current way of implementing the
+        add_activity() method.
+        """
+        gui_backend_dict = {0: [self.activity_1, self.activity_1_time], 
+                            1: [self.activity_2, self.activity_2_time], 
+                            2: [self.activity_3, self.activity_3_time], 
+                            3: [self.activity_4, self.activity_4_time], 
+                            4: [self.activity_5, self.activity_5_time]}
+        return gui_backend_dict
+
 
     def closeEvent(self, event):
         """
