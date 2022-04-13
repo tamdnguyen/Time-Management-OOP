@@ -53,7 +53,7 @@ class DayTask():
 
     def add_activities(self, activity):
         """
-        Adds the input activity to the activities list. Maximum 5 activities can be added
+        Adds the input activity to the activities list. Maximum 5 activities can be added. When add another activities to the program, the timers of all activities stop.
         
         @parameter:
             - activity: the activity to be added to the activities list
@@ -62,6 +62,9 @@ class DayTask():
             - True if added successfully
             - False if the activity can't be added
         """
+        for existed_activity in self.get_activities():
+            existed_activity.get_timer().stop()
+            
         if activity.set_dayTask(self):
             self.get_activities().append(activity)
             return True
