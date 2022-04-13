@@ -43,13 +43,14 @@ go to folder Code, run the file `main.py`
  
 ## What to do next?
 
-- [ ] Import/Export the time management data
+- [x] ~~Import/Export the time management data~~
 - [x] ~~Unittest~~
-- [ ] GUI | Connect to the backend + Main workflow
+- [ ] GUI | Connect to the backend
+- [ ] Main workflow
 - [ ] Pomodoro and reminder to take a break | Modify the return and workflow
 - [ ] Moving to next day function [?]
 - [ ] Choose the day to show function
-- [ ] Loading a file to the program function [?]
+- [x] ~~Loading a file to the program function **Same as the Import function**~~
 - [x] ~~Edit and Delete function~~
 
 ## Some current limitation (bugs) of the app
@@ -57,7 +58,11 @@ go to folder Code, run the file `main.py`
 At the moment, the app still has some small limitations that can be noticed during the use (it does not work perfectly as the apps on the market). However, many improvements can be made to the app in the future. Some of the limitations that have been noticed so far include:
 - User creates 2 activities with the same name is now still possible in the app. One improvement can be creating a pop up windows to ask if the person wants to rename the activity or not.
 
+## Reference
 
-Last update: 10.04.2022
+- Stopwatch in Python (for class Timer): https://github.com/ravener/stopwatch.py
+
+
+Last update: 13.04.2022
 
 Happy Learning! Cheers!
