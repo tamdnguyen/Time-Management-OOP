@@ -6,32 +6,28 @@ from PyQt5.QtWidgets import (
     QGridLayout, QHBoxLayout, QVBoxLayout,
     QInputDialog)
 from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 
-class Color(QWidget):
-    """
-    This class creates a box with color to create the initial layout of the program
-    """
-    def __init__(self, color):
-        super(Color, self).__init__()
-        self.setAutoFillBackground(True)
-
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
 
 class GUI(QWidget):
     """
     The class GUI create the graphical user interface of the program using PyQt5
     """
-    def __init__(self):
+    def __init__(self, dayTask):
         """
         This method creates the initial GUI of the program
         """
         super().__init__()
+        self.dayTask = dayTask
 
         self.layout()
         self.init_windows()
+
+        # Set a timer to call the update function periodically
+        # TODO: create the self.show_time() method and enable next 3 lines
+        # self.timer = QTimer()
+        # self.timer.timeout.connect(self.show_time())
+        # self.timer.start(1000) # Update the time on the screen after every second
 
     def init_windows(self):
         """
@@ -91,7 +87,8 @@ class GUI(QWidget):
         self.time_conversion.setMenu(time_conversion_menu)
 
         # TODO: connect the text h1 below to the real date show of the DayTask
-        self.activity_date = QLabel("<h1>{:s}</h1>".format("Current Activity Date"), self)
+        print(str(self.dayTask.get_date()))
+        self.activity_date = QLabel("<h1>{:s}</h1>".format(str(self.dayTask.get_date())), self)
         
         self.add_activity = QPushButton("Add Activity", self)
         self.add_activity.clicked.connect(self.show_add_dialog)
@@ -205,5 +202,10 @@ class GUI(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def show_time(self):
+        # TODO: add the method to update the labels which show time of the activities
+        # The label activity_*_time
+        pass
 
 

@@ -46,7 +46,7 @@ def main():
     allTask.export_file()
 
     app = QApplication(sys.argv)
-    gui = GUI()
+    gui = GUI(tomorrow_day_task)
     sys.exit(app.exec_())
 
 
