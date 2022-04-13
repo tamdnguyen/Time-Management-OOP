@@ -9,6 +9,9 @@ class DateGenerator:
     This class is helpful for method import_date() of class DayTask
     and method import_data() of class AllTask
 
+    NOTE: Usage: the time_expression parameter is a string of the date in format "DD-MM-YYYY"
+    If one wants to read the filename as the parameter, use string slice [0:-4]
+
     See the documentation of class DayTask, AllTask, and Date
     """
     def __init__(self, time_expression):
@@ -19,7 +22,7 @@ class DateGenerator:
         return self._time_expression
 
     def create_date(self):
-        time_expression = str(self.time_expression)[0:-4]
+        time_expression = str(self.time_expression)
         date_data  = time_expression.split("-")
         day = int(date_data[0])
         month = int(date_data[1])

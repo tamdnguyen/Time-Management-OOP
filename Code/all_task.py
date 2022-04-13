@@ -1,7 +1,7 @@
 import csv
 from day_task import DayTask
 from activity import Activity
-
+from date_generator import DateGenerator
 class AllTask():
     """
     The class AllTask represents the "world" of the program.
@@ -73,8 +73,6 @@ class AllTask():
     def import_file(self, filename):
         """
         This method reads a CSV file named "all_data.csv" and creates the DayTask, Activity objects for the program
-        
-        TODO: add the exceptions and raise errors to deal with problems while reading files
         """
         try:
             file = open(filename, "r")
@@ -87,7 +85,7 @@ class AllTask():
                 parts = line.split(",")
 
                 # TODO: run main to see if it is possible to create DayTask with string value like this
-                dayTask = DayTask(parts[0])
+                dayTask = DayTask(DateGenerator(parts[0]).create_date())
                 activity = Activity(parts[1], parts[2])
 
                 final_dayTask_in_AllTask = self.add_days(dayTask)

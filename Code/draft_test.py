@@ -58,7 +58,7 @@ def test_import_date():
     filename = "13-04-2022.csv"
     file_path = "time-management-oop/Code/time_data/" + filename
 
-    dayTask = DayTask(DateGenerator(filename))
+    dayTask = DayTask(DateGenerator(filename[:-4]))
 
     print(dayTask)
 
@@ -82,4 +82,5 @@ def test_import_file():
         for activity in dayTask.get_activities():
             print(activity)
 
+test_import_date()
 test_import_file()
