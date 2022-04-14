@@ -24,12 +24,14 @@ class GUI(QWidget):
         self.layout()
         self.init_windows()
 
-        # Set a timer to call the update function periodically
-        # TODO: create the self.show_time() method and enable next 3 lines
-        # self.timer = QTimer()
-        # self.timer.timeout.connect(self.show_time())
-        # self.timer.start(1000) # Update the time on the screen after every second
+        # Set a variable to indicate the format of time_expression
+        self.time_format = 1
 
+        # Set a timer to call the update function periodically
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.updateAll)
+        self.timer.start(1000) # Update the time on the screen after every second
+        
 
     def init_windows(self):
         """
@@ -83,10 +85,10 @@ class GUI(QWidget):
         # TODO: add the action when user choose the item in the dropdown list
         self.time_conversion = QPushButton("Time Conversion", self)
         time_conversion_menu = QMenu(self)
-        time_conversion_menu.addAction("Hour:Min:Sec")
-        time_conversion_menu.addAction("Min:Sec")
-        time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)")
-        time_conversion_menu.addAction("Standard Expression")
+        time_conversion_menu.addAction("Hour:Min:Sec", self.change_time_expression(1))
+        time_conversion_menu.addAction("Min:Sec", self.change_time_expression(2))
+        time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)", self.change_time_expression(3))
+        time_conversion_menu.addAction("Standard Expression", self.change_time_expression(4))
         self.time_conversion.setMenu(time_conversion_menu)
 
         self.activity_date = QLabel(str(self.dayTask.get_date()), self)
@@ -105,8 +107,6 @@ class GUI(QWidget):
     def activity_widget(self, activity_layout):
         """
         This method adds the widgets to the activity section of the GUI
-
-        TODO: Change the label to the real activities in DayTask
         """
         # create the widgets
         self.activity_1 = QLabel("Task 1", self)
@@ -196,27 +196,15 @@ class GUI(QWidget):
         """
         This method shows a pop up windows to ask for the name of the activity and create new activity for the program
         """
-        # this dictionary maps the activities in the DayTask list to the widget in the frontend GUI
-        gui_frontend_dict = {0: [self.activity_1, self.activity_1_time], 
-                            1: [self.activity_2, self.activity_2_time], 
-                            2: [self.activity_3, self.activity_3_time], 
-                            3: [self.activity_4, self.activity_4_time], 
-                            4: [self.activity_5, self.activity_5_time]}
-        
-        widget_index = self.dayTask.get_len()
-
         activity_name, ok = QInputDialog.getText(self, 'Activity Name',
                                         'Enter activity name:')
 
         if ok:
             activity = Activity(activity_name)
 
-            if self.dayTask.add_activities(activity):
-                widget_name_connected = gui_frontend_dict[widget_index][0]
-                widget_time_connected = gui_frontend_dict[widget_index][1]
-                widget_name_connected.setText(activity_name)
-                widget_time_connected.setText(activity.set_time_format(1))
-            else:
+            add_successfully = self.dayTask.add_activities(activity)
+
+            if not add_successfully:
                 warning_box = QMessageBox()
                 warning_box.setIcon(QMessageBox.Warning)
                 warning_box.setWindowTitle("Adding new activity failed")
@@ -224,20 +212,46 @@ class GUI(QWidget):
                 warning_box.exec()
     
 
-    def gui_backend_dict(self):
+    def index_widget_dict(self):
         """
-        TODO: Figure out how to connect the activities in Daytask with the GUI widget
-        Then can modify the add_activity() method above to be smarter and more convenient.
-        In that way, widgets activity_* and activity_*_time can show the name and time of the activity
-        better, also change the time_conversion value can be easier than current way of implementing the
-        add_activity() method.
+        This method returns a dictionary that maps the INDEX of the activities in the DayTask object to the corresponding GUI widget.
         """
-        gui_backend_dict = {0: [self.activity_1, self.activity_1_time], 
+        index_widget_dict = {0: [self.activity_1, self.activity_1_time], 
                             1: [self.activity_2, self.activity_2_time], 
                             2: [self.activity_3, self.activity_3_time], 
                             3: [self.activity_4, self.activity_4_time], 
                             4: [self.activity_5, self.activity_5_time]}
-        return gui_backend_dict
+        return index_widget_dict
+
+
+    def activity_widget_dict(self):
+        """
+        This method maps the activities of the DayTask object to the corresponding GUI widget in the index_widget_dict
+
+        When all 5 activities are added to the DayTask object, the dictionary is
+
+        activity_widget_dict = {
+            self.dayTask.get_activities()[0]: [self.activity_1, self.activity_1_time], 
+            self.dayTask.get_activities()[1]: [self.activity_2, self.activity_2_time], 
+            self.dayTask.get_activities()[2]: [self.activity_3, self.activity_3_time], 
+            self.dayTask.get_activities()[3]: [self.activity_4, self.activity_4_time], 
+            self.dayTask.get_activities()[4]: [self.activity_5, self.activity_5_time]
+            }
+        """
+        activity_widget_dict = {}
+
+        index_widget_dict = self.index_widget_dict()
+        activities_list = self.dayTask.get_activities()
+
+        try:
+            for key, value in index_widget_dict.items():
+                main_key = activities_list[key]
+                main_value = value
+                activity_widget_dict[main_key] = main_value
+        except IndexError:
+            pass
+
+        return activity_widget_dict
 
 
     def closeEvent(self, event):
@@ -266,9 +280,39 @@ class GUI(QWidget):
         self.move(qr.topLeft())
 
 
-    def show_time(self):
-        # TODO: add the method to update the labels which show time of the activities
-        # The label activity_*_time
-        pass
+    def update_activity_info(self):
+        """
+        This method updates the name and the timer of the activities in the dayTask object and shows it in the corresponding GUI widget
+
+        This method also shows the time according to the time expression user choose.
+        """
+
+        """
+        - format: this is the format for the set_time_format() method of class Activity.
+            The value is set to the self.time_format of the class. In this way, when there are changes with the TimeConversion dropdown list, only the self.time_format is changed, and everything is updated. The default time expression format is 1.
+
+        See method TODO: change_time_expression()
+        """
+        format = self.time_format
+
+        activity_widget_dict = self.activity_widget_dict()
+
+        for key, value in activity_widget_dict.items():
+            value[0].setText(key.get_name())
+            value[1].setText(key.set_time_format(format))
+
+    
+    def change_time_expression(self, format):
+        """
+        This method changes the value of self.time_format, which will also changes the time expression in the GUI widget.
+        """
+        self.time_format = format
+
+
+    def updateAll(self):
+        """
+        This method combines different updates of the backend info vs GUI widget display, and it makes all these updates at once
+        """
+        self.update_activity_info()
 
 

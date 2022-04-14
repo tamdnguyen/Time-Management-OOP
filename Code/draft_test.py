@@ -5,6 +5,12 @@ from day_task import DayTask
 from all_task import AllTask
 from date_generator import DateGenerator
 
+"""
+NOT IMPORTANT FILE
+
+This file has nothing to do with the overall structure of the files.
+It is just created for author to add his random checks for the functions and classes.
+"""
 
 def main():
     name = str(input("Enter task name\n"))

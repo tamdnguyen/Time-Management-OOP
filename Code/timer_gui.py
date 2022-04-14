@@ -5,7 +5,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import * 
 import sys
 from timer import Timer
-  
+
+"""
+NOT IMPORTANT FILE
+
+This file is just a reference file for the implementation of showing activities time on screen live.
+"""
   
 class Window(QMainWindow):
   

@@ -3,6 +3,11 @@ from datetime import timedelta
 
 class TimeConversion:
     """
+    The class TimeConversion provides method for converting the time into different type of expressions.
+    """
+    
+    
+    """
     These constants represent the time conversion
     equivalent to time in seconds
     """

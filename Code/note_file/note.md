@@ -106,3 +106,7 @@ Links:
 The beginning of the link:
 https://doc.qt.io/qt-5/qmessagebox.html
 
+# Add updates function
+
+- updateAll() like GUI Robot
+- update the activities info
