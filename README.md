@@ -10,7 +10,7 @@ The GUI is complete. Program is completed around 60-70%. Some functions of the p
 
  - Python3 can be downloaded from [Python Official website](https://www.python.org/downloads/) (Python 3.9 is recommended)
 
-### Code Editor (OPTIONAL)
+### Code Editor (Optional)
 
 A code editor is not mandatory to run the program, but it is nice to have one. Here are some recommended code editors:
 - Visual Studio Code: download [here](https://code.visualstudio.com/download)
@@ -22,55 +22,41 @@ A code editor is not mandatory to run the program, but it is nice to have one. H
 In your terminal (command prompt in Windows), change directory to the project folder and run the following commands:
 
 ```
-$ git clone https://github.com/tamdnguyen/Time-Management-OOP.git
+$ git clone https://version.aalto.fi/gitlab/nguyent99/time-management-oop.git
+$ cd Time-Management-OOP
 $ pip install -r requirements.txt
 ```
 
+## Usage
 
+#### If you are a GUI type person and would like to use the code editors (Recommended method)
+
+In your code editor, open the folder `Time-Management-OOP`. In folder `Code`, open and run the file `main.py` to start the program. That's it, enjoy the program.
+
+#### If you are a terminal type person
+
+In the terminal, `cd` to folder `Time-Management-OOP`. Run the commands below:
+
+```
+$ cd Code
+$ python main.py
+```
 
 
 ## Current properties
 
-Some main classes of the program has been implemented:
-- `Activity` class
-- `Timer` class
-- `Date` class
-- `TimeConversion` class
+The GUI is completed and can be used easily. Currently, the `main` function is written in a testing style, so the program works is not 100% ready.
 
-Currently, the program can create the tasks and track its time. However,
-the time tracking is still not automatic, I could only test the tracking
-feature using `time.sleep()` function.
-
-The time display can also be chosen by the users. There are currently
-4 different choices of time display.
-
-
-## Instructions
-
- - Is it possible to run the program already? No. However, a main function
-can be written to run the program at the most basic level (i.e., add activities
-, automatically track time of the activities, choose different time display)
- - How is the program executed? For the most basic execution of the program,
-a very simple `main` function has been written. This function creates a task,
-and track its time using the `time.sleep()` function. To execute this `main`,
-go to folder Code, run the file `main.py`
-
-## Schedule
-
- - How much time have you spent making the project this far? More than three full days
- - Have you made changes to the schedule of your project plan?
-
-## Other
-
- - Have you faced any specific problems? At first, I was lost at implementing the main classes
- - Have you had to make changes to your plan?
+However, some basic things can be done now. For example, the users can add/delete/edit the activities. The users can also start, stop, reset, restart the timer. There is also a `Time Conversion` button so that the users can choose the time expression they like.
  
 ## What to do next?
+
+Connect all the buttons on the GUI to the backend to add functionality for them. Add color, decoration so that the program is more user-friendly.
 
 - [x] ~~Import/Export the time management data~~
 - [x] ~~Unittest~~
 - [ ] GUI | Connect to the backend
-- [ ] Main workflow
+- [x] ~~Main workflow~~
 - [ ] Pomodoro and reminder to take a break | Modify the return and workflow
 - [ ] Moving to next day function [?]
 - [ ] Choose the day to show function
@@ -82,6 +68,7 @@ go to folder Code, run the file `main.py`
 At the moment, the app still has some small limitations that can be noticed during the use (it does not work perfectly as the apps on the market). However, many improvements can be made to the app in the future. Some of the limitations that have been noticed so far include:
 - User creates 2 activities with the same name is now still possible in the app. One improvement can be creating a pop up windows to ask if the person wants to rename the activity or not.
 - User cannot hold and change the position of the activities in the GUI
+- After deleting the activities, the GUI display shows wrong information.
 
 ## Reference
 
@@ -89,6 +76,6 @@ At the moment, the app still has some small limitations that can be noticed duri
 - PyQt5 GUI tutorial: https://zetcode.com/gui/pyqt5/
 
 
-Last update: 13.04.2022
+Last update: 15.04.2022
 
 Happy Learning! Cheers!
