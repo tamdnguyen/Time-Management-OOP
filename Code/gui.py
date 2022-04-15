@@ -1,4 +1,5 @@
 from ctypes import alignment
+from distutils.log import info
 from tracemalloc import stop
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
@@ -85,10 +86,10 @@ class GUI(QWidget):
         # TODO: add the action when user choose the item in the dropdown list
         self.time_conversion = QPushButton("Time Conversion", self)
         time_conversion_menu = QMenu(self)
-        time_conversion_menu.addAction("Hour:Min:Sec", self.change_time_expression(1))
-        time_conversion_menu.addAction("Min:Sec", self.change_time_expression(2))
-        time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)", self.change_time_expression(3))
-        time_conversion_menu.addAction("Standard Expression", self.change_time_expression(4))
+        time_conversion_menu.addAction("Hour:Min:Sec", lambda: self.change_time_expression(1))
+        time_conversion_menu.addAction("Min:Sec", lambda: self.change_time_expression(2))
+        time_conversion_menu.addAction("Finnish ECTS (1ECT=27hour)", lambda: self.change_time_expression(3))
+        time_conversion_menu.addAction("Standard Expression", lambda: self.change_time_expression(4))
         self.time_conversion.setMenu(time_conversion_menu)
 
         self.activity_date = QLabel(str(self.dayTask.get_date()), self)
@@ -208,8 +209,14 @@ class GUI(QWidget):
                 warning_box = QMessageBox()
                 warning_box.setIcon(QMessageBox.Warning)
                 warning_box.setWindowTitle("Adding new activity failed")
-                warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.")
+                warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.\n\nActivities' timers are stopped,\nplease click Start button to continue.")
                 warning_box.exec()
+            else:
+                info_box = QMessageBox()
+                info_box.setIcon(QMessageBox.Information)
+                info_box.setWindowTitle("Adding new activity failed")
+                info_box.setText("Timers are stopped, please\nclick Start button to continue.")
+                info_box.exec()
     
 
     def index_widget_dict(self):
@@ -291,7 +298,7 @@ class GUI(QWidget):
         - format: this is the format for the set_time_format() method of class Activity.
             The value is set to the self.time_format of the class. In this way, when there are changes with the TimeConversion dropdown list, only the self.time_format is changed, and everything is updated. The default time expression format is 1.
 
-        See method TODO: change_time_expression()
+        See method change_time_expression()
         """
         format = self.time_format
 
