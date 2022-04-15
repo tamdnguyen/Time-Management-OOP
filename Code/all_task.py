@@ -62,7 +62,7 @@ class AllTask():
         """
         csv_message = ["NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data", " please use Stats button in the app instead."]
         csv_header = ["Date", "Activity", "Time (in second)"]
-        file_path = "time-management-oop/Code/time_data/all_data.csv"
+        file_path = "Code/time_data/all_data.csv"
 
         with open(file_path, "w", newline="") as csv_file:
             writer = csv.writer(csv_file)

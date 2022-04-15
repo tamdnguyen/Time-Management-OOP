@@ -44,6 +44,12 @@ class DayTask():
         """
         return self._date
 
+    def get_allTask(self):
+        """
+        Return the allTask object that contains this DayTask object
+        """
+        return self._allTask
+
     def set_allTask(self, allTask):
         """
         This methods check if the DayTask object (self) have existed and can be added to the given AllTask object or not
@@ -116,7 +122,7 @@ class DayTask():
         csv_message = ["NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data", " please use Stats button in the app instead. WARNING: DO NOT edit the exported CSV file!"]
         csv_header = ["Activity", "Time (in second)"]
         date = self.get_date()
-        file_path = "time-management-oop/Code/time_data/" + str(date) + ".csv"
+        file_path = "Code/time_data/" + str(date) + ".csv"
 
         with open(file_path, "w", newline="") as csv_file:
             writer = csv.writer(csv_file)

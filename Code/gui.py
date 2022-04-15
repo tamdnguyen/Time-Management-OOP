@@ -1,3 +1,4 @@
+from random import expovariate
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
     QPushButton, QLabel, QMenu,
@@ -197,6 +198,8 @@ class GUI(QWidget):
         # add functionality for the buttons
         self.edit_btn_widget()
         self.delete_btn_widget()
+        self.more_btn_widget()
+        self.help_btn_widget()
 
 
     def index_widget_dict(self):
@@ -434,6 +437,8 @@ class GUI(QWidget):
     def delete_btn_widget(self):
         """
         This method creates the content and adds functionality for the Edit button on the GUI
+
+        TODO: Change the label of the activity_* and activity_*_time to the default after deleting
         """
         activities_list = self.dayTask.get_activities()
 
@@ -450,6 +455,33 @@ class GUI(QWidget):
             pass
 
         self.delete_btn.setMenu(delete_menu)
+
+
+    def more_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the More button on the GUI
+        """
+        more_menu = QMenu(self)
+
+        more_menu.addAction("Export", lambda: self.export_btn())
+        more_menu.addAction("Import", lambda: self.export_btn())
+        more_menu.addAction("Next Day", lambda: self.export_btn())
+        more_menu.addAction("Choose Day", lambda: self.export_btn())
+
+        self.more_btn.setMenu(more_menu)
+
+
+    def help_btn_widget(self):
+        """
+        This method shows a pop up windows to show some guidance for the user.
+
+        TODO: Add content for help button
+        """
+        help_box = QMessageBox()
+        help_box.setIcon(QMessageBox.Information)
+        help_box.setWindowTitle("Help Function")
+        help_box.setText("Exported files are in CSV type and are\nbest viewed with Excel. For visualizing data,\nplease use Stats button in the app instead.\nExported file can be found in folder time_data.")
+        
 
 
     def rename_dialog(self, activity):
@@ -482,6 +514,26 @@ class GUI(QWidget):
 
         if confirmation == QMessageBox.Yes:
             self.dayTask.delete_activities(activity)
+
+
+    def export_btn(self):
+        """
+        This method exports the data of the dayTask and AllTask.
+        
+        Before performing the export action, it shows a pop up windows to get the confirmation from the user.
+        """
+        export_box = QMessageBox()
+        export_box.setIcon(QMessageBox.Question)
+        export_box.setWindowTitle("Confirm Exporting Data")
+        export_box.setText("Exported files are in CSV type and are\nbest viewed with Excel.For visualizing data,\nplease use Stats button in the app instead.\nExported file can be found in folder time_data.")
+        export_box.setInformativeText("Do you want to proceed?")
+        export_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        export_box.setDefaultButton(QMessageBox.Yes)
+        confirmation = export_box.exec()
+
+        if confirmation == QMessageBox.Yes:
+            self.dayTask.export_data()
+            self.dayTask.get_allTask().export_file()
 
 
     def closeEvent(self, event):
