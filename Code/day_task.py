@@ -1,6 +1,7 @@
 import csv
 from activity import Activity
 
+
 class DayTask():
     """
     The class AllTask represents the "brain" of the program. The information displayed on the GUI can be access from this class.

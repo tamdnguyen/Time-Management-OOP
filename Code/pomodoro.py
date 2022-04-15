@@ -1,6 +1,7 @@
 import math
 from timer import Timer
 
+
 class Pomodoro(Timer):
     """
     The class Pomodoro creates a reminder and sends it to the user

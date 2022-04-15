@@ -9,6 +9,7 @@ from date import Date
 from all_task import AllTask
 from date_generator import DateGenerator
 
+
 def main():
     
     allTask = AllTask()

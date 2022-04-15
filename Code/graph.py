@@ -13,9 +13,6 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore, QtGui
 from PyQt5 import QtWidgets
   
-# importing numpy as np
-import numpy as np
-  
 import time
   
 # creating a pyqtgraph plot window

@@ -1,9 +1,33 @@
 # Time management OOP
 
-## Checkpoint 1 - 25.03.2022
+## Checkpoint 2 - 15.04.2022
 
-Some main classes have been implemented. Code can be found in folder Code
-from the project page.
+The GUI is complete. Program is completed around 60-70%. Some functions of the program are not yet implemented and cannot be used.
+
+## Getting Started
+
+### Python3
+
+ - Python3 can be downloaded from [Python Official website](https://www.python.org/downloads/) (Python 3.9 is recommended)
+
+### Code Editor (OPTIONAL)
+
+A code editor is not mandatory to run the program, but it is nice to have one. Here are some recommended code editors:
+- Visual Studio Code: download [here](https://code.visualstudio.com/download)
+- PyCharm: download [here](https://www.jetbrains.com/pycharm/download/#section=windows)
+- Some other popular code editors: Sublime Text, Vim, etc.
+
+### Install
+
+In your terminal (command prompt in Windows), change directory to the project folder and run the following commands:
+
+```
+$ git clone https://github.com/tamdnguyen/Time-Management-OOP.git
+$ pip install -r requirements.txt
+```
+
+
+
 
 ## Current properties
 
@@ -62,6 +86,7 @@ At the moment, the app still has some small limitations that can be noticed duri
 ## Reference
 
 - Stopwatch in Python (for class Timer): https://github.com/ravener/stopwatch.py
+- PyQt5 GUI tutorial: https://zetcode.com/gui/pyqt5/
 
 
 Last update: 13.04.2022

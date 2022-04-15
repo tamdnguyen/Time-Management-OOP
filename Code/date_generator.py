@@ -1,5 +1,6 @@
 from date import Date
 
+
 class DateGenerator:
     """
     This class is a supplementary class for Date class.

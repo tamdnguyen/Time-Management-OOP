@@ -1,5 +1,3 @@
-
-from re import S
 from PyQt5.QtWidgets import (QWidget, QPushButton,
                              QFrame, QApplication)
 from PyQt5.QtGui import QColor

@@ -2,6 +2,8 @@ import csv
 from day_task import DayTask
 from activity import Activity
 from date_generator import DateGenerator
+
+
 class AllTask():
     """
     The class AllTask represents the "world" of the program.
