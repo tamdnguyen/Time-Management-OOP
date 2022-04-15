@@ -1,11 +1,8 @@
-from ctypes import alignment
-from distutils.log import info
-from tracemalloc import stop
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
     QPushButton, QLabel, QMenu,
     QGridLayout, QHBoxLayout, QVBoxLayout,
-    QInputDialog)
+    QInputDialog, QAction)
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, QTimer
 from activity import Activity
@@ -83,7 +80,6 @@ class GUI(QWidget):
         This method adds the widgets to the title section of the GUI
         """
         # create the widgets and add the function for them
-        # TODO: add the action when user choose the item in the dropdown list
         self.time_conversion = QPushButton("Time Conversion", self)
         time_conversion_menu = QMenu(self)
         time_conversion_menu.addAction("Hour:Min:Sec", lambda: self.change_time_expression(1))
@@ -101,7 +97,7 @@ class GUI(QWidget):
         title_layout.addWidget(self.activity_date, 4, alignment = Qt.AlignHCenter | Qt.AlignVCenter)
         title_layout.addWidget(self.add_activity_btn, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
 
-        # add the actions for the widgets
+        # add functionality for the widgets
         self.add_activity_btn.clicked.connect(self.add_activity)
 
 
@@ -157,7 +153,7 @@ class GUI(QWidget):
         self.start_btn = QPushButton("Start", self)
         self.stop_btn = QPushButton("Stop", self)
         self.reset_btn = QPushButton("Reset", self)
-        self.edit_btn = QPushButton("Edit", self)
+        self.restart_btn = QPushButton("Restart", self)
         self.stats_btn = QPushButton("Statistics", self)
 
         # set the alignment to the center vertically and horizontally of the cell
@@ -167,8 +163,14 @@ class GUI(QWidget):
         mainbutton_layout.addWidget(self.start_btn, alignment)
         mainbutton_layout.addWidget(self.stop_btn, alignment)
         mainbutton_layout.addWidget(self.reset_btn, alignment)
-        mainbutton_layout.addWidget(self.edit_btn, alignment)
+        mainbutton_layout.addWidget(self.restart_btn, alignment)
         mainbutton_layout.addWidget(self.stats_btn, alignment)
+
+        # add functionality for the buttons
+        self.start_btn_widget()
+        self.stop_btn_widget()
+        self.reset_btn_widget()
+        self.restart_btn_widget()
 
 
     def otherbutton_widget(self, otherbutton_layout):
@@ -176,48 +178,26 @@ class GUI(QWidget):
         This method adds the widgets to the other button section of the GUI
         """
         # create the widgets
-        self.export_btn = QPushButton("Export", self)
-        self.import_btn = QPushButton("Import", self)
-        self.next_day_btn = QPushButton("Next Day", self)
+        self.edit_btn = QPushButton("Edit", self)
+        self.delete_btn = QPushButton("Delete", self)
         self.pomodoro_btn = QPushButton("Pomodoro", self)
+        self.more_btn = QPushButton("More", self)
         self.help_btn = QPushButton("Need help?", self)
 
         # set the alignment to the center vertically and horizontally of the cell
         alignment = Qt.AlignHCenter | Qt.AlignVCenter
 
         # add the widgets to the GUI Layout
-        otherbutton_layout.addWidget(self.export_btn, alignment)
-        otherbutton_layout.addWidget(self.import_btn, alignment)
-        otherbutton_layout.addWidget(self.next_day_btn, alignment)
+        otherbutton_layout.addWidget(self.edit_btn, alignment)
+        otherbutton_layout.addWidget(self.delete_btn, alignment)
         otherbutton_layout.addWidget(self.pomodoro_btn, alignment)
+        otherbutton_layout.addWidget(self.more_btn, alignment)
         otherbutton_layout.addWidget(self.help_btn, alignment)
 
+        # add functionality for the buttons
+        self.edit_btn_widget()
+        self.delete_btn_widget()
 
-    def add_activity(self):
-        """
-        This method shows a pop up windows to ask for the name of the activity and create new activity for the program
-        """
-        activity_name, ok = QInputDialog.getText(self, 'Activity Name',
-                                        'Enter activity name:')
-
-        if ok:
-            activity = Activity(activity_name)
-
-            add_successfully = self.dayTask.add_activities(activity)
-
-            if not add_successfully:
-                warning_box = QMessageBox()
-                warning_box.setIcon(QMessageBox.Warning)
-                warning_box.setWindowTitle("Adding new activity failed")
-                warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.\n\nActivities' timers are stopped,\nplease click Start button to continue.")
-                warning_box.exec()
-            else:
-                info_box = QMessageBox()
-                info_box.setIcon(QMessageBox.Information)
-                info_box.setWindowTitle("Adding new activity failed")
-                info_box.setText("Timers are stopped, please\nclick Start button to continue.")
-                info_box.exec()
-    
 
     def index_widget_dict(self):
         """
@@ -259,6 +239,249 @@ class GUI(QWidget):
             pass
 
         return activity_widget_dict
+
+
+    def change_time_expression(self, format):
+        """
+        This method changes the value of self.time_format, which will also changes the time expression in the GUI widget.
+        """
+        self.time_format = format
+
+
+    def add_activity(self):
+        """
+        This method shows a pop up windows to ask for the name of the activity and create new activity for the program
+        """
+        activity_name, ok = QInputDialog.getText(self, 'Activity Name',
+                                        'Enter activity name:')
+
+        if ok:
+            activity = Activity(activity_name)
+
+            add_successfully = self.dayTask.add_activities(activity)
+
+            if not add_successfully:
+                warning_box = QMessageBox()
+                warning_box.setIcon(QMessageBox.Warning)
+                warning_box.setWindowTitle("Adding new activity failed")
+                warning_box.setText("Maximum 5 activities can\nbe added at the same time.\n\nEdit/Delete an activity if\nyou want to add a new one.\n\nActivities' timers are stopped,\nplease click Start button to continue.")
+                warning_box.exec()
+            else:
+                info_box = QMessageBox()
+                info_box.setIcon(QMessageBox.Information)
+                info_box.setWindowTitle("Notification")
+                info_box.setText("Timers are stopped, please\nclick Start button to continue.")
+                info_box.exec()
+
+
+    def start_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Start button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        start_menu = QMenu(self)
+
+        try:
+            start_activity1_act = QAction(activities_list[0].get_name(), self)
+            start_activity1_act.triggered.connect(activities_list[0].get_timer().start)
+            start_menu.addAction(start_activity1_act)
+
+            start_activity2_act = QAction(activities_list[1].get_name(), self)
+            start_activity2_act.triggered.connect(activities_list[1].get_timer().start)
+            start_menu.addAction(start_activity2_act)
+
+            start_activity3_act = QAction(activities_list[2].get_name(), self)
+            start_activity3_act.triggered.connect(activities_list[2].get_timer().start)
+            start_menu.addAction(start_activity3_act)
+
+            start_activity4_act = QAction(activities_list[3].get_name(), self)
+            start_activity4_act.triggered.connect(activities_list[3].get_timer().start)
+            start_menu.addAction(start_activity4_act)
+
+            start_activity5_act = QAction(activities_list[4].get_name(), self)
+            start_activity5_act.triggered.connect(activities_list[4].get_timer().start)
+            start_menu.addAction(start_activity5_act)
+        except IndexError:
+            pass
+
+        self.start_btn.setMenu(start_menu)
+
+
+    def stop_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Stop button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        stop_menu = QMenu(self)
+
+        try:
+            stop_activity1_act = QAction(activities_list[0].get_name(), self)
+            stop_activity1_act.triggered.connect(activities_list[0].get_timer().stop)
+            stop_menu.addAction(stop_activity1_act)
+
+            stop_activity2_act = QAction(activities_list[1].get_name(), self)
+            stop_activity2_act.triggered.connect(activities_list[1].get_timer().stop)
+            stop_menu.addAction(stop_activity2_act)
+
+            stop_activity3_act = QAction(activities_list[2].get_name(), self)
+            stop_activity3_act.triggered.connect(activities_list[2].get_timer().stop)
+            stop_menu.addAction(stop_activity3_act)
+
+            stop_activity4_act = QAction(activities_list[3].get_name(), self)
+            stop_activity4_act.triggered.connect(activities_list[3].get_timer().stop)
+            stop_menu.addAction(stop_activity4_act)
+
+            stop_activity5_act = QAction(activities_list[4].get_name(), self)
+            stop_activity5_act.triggered.connect(activities_list[4].get_timer().stop)
+            stop_menu.addAction(stop_activity5_act)
+        except IndexError:
+            pass
+
+        self.stop_btn.setMenu(stop_menu)
+
+
+    def reset_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Reset button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        reset_menu = QMenu(self)
+
+        try:
+            reset_activity1_act = QAction(activities_list[0].get_name(), self)
+            reset_activity1_act.triggered.connect(activities_list[0].get_timer().reset)
+            reset_menu.addAction(reset_activity1_act)
+
+            reset_activity2_act = QAction(activities_list[1].get_name(), self)
+            reset_activity2_act.triggered.connect(activities_list[1].get_timer().reset)
+            reset_menu.addAction(reset_activity2_act)
+
+            reset_activity3_act = QAction(activities_list[2].get_name(), self)
+            reset_activity3_act.triggered.connect(activities_list[2].get_timer().reset)
+            reset_menu.addAction(reset_activity3_act)
+
+            reset_activity4_act = QAction(activities_list[3].get_name(), self)
+            reset_activity4_act.triggered.connect(activities_list[3].get_timer().reset)
+            reset_menu.addAction(reset_activity4_act)
+
+            reset_activity5_act = QAction(activities_list[4].get_name(), self)
+            reset_activity5_act.triggered.connect(activities_list[4].get_timer().reset)
+            reset_menu.addAction(reset_activity5_act)
+        except IndexError:
+            pass
+
+        self.reset_btn.setMenu(reset_menu)
+
+
+    def restart_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Restart button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        restart_menu = QMenu(self)
+
+        try:
+            restart_activity1_act = QAction(activities_list[0].get_name(), self)
+            restart_activity1_act.triggered.connect(activities_list[0].get_timer().restart)
+            restart_menu.addAction(restart_activity1_act)
+
+            restart_activity2_act = QAction(activities_list[1].get_name(), self)
+            restart_activity2_act.triggered.connect(activities_list[1].get_timer().restart)
+            restart_menu.addAction(restart_activity2_act)
+
+            restart_activity3_act = QAction(activities_list[2].get_name(), self)
+            restart_activity3_act.triggered.connect(activities_list[2].get_timer().restart)
+            restart_menu.addAction(restart_activity3_act)
+
+            restart_activity4_act = QAction(activities_list[3].get_name(), self)
+            restart_activity4_act.triggered.connect(activities_list[3].get_timer().restart)
+            restart_menu.addAction(restart_activity4_act)
+
+            restart_activity5_act = QAction(activities_list[4].get_name(), self)
+            restart_activity5_act.triggered.connect(activities_list[4].get_timer().restart)
+            restart_menu.addAction(restart_activity5_act)
+        except IndexError:
+            pass
+
+        self.restart_btn.setMenu(restart_menu)
+
+
+    def edit_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Edit button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        edit_menu = QMenu(self)
+
+        try:
+            edit_menu.addAction(activities_list[0].get_name(), lambda: self.rename_dialog(activities_list[0]))
+            edit_menu.addAction(activities_list[1].get_name(), lambda: self.rename_dialog(activities_list[1]))
+            edit_menu.addAction(activities_list[2].get_name(), lambda: self.rename_dialog(activities_list[2]))
+            edit_menu.addAction(activities_list[3].get_name(), lambda: self.rename_dialog(activities_list[3]))
+            edit_menu.addAction(activities_list[4].get_name(), lambda: self.rename_dialog(activities_list[4]))
+
+        except IndexError:
+            pass
+
+        self.edit_btn.setMenu(edit_menu)
+
+
+    def delete_btn_widget(self):
+        """
+        This method creates the content and adds functionality for the Edit button on the GUI
+        """
+        activities_list = self.dayTask.get_activities()
+
+        delete_menu = QMenu(self)
+
+        try:
+            delete_menu.addAction(activities_list[0].get_name(), lambda: self.delete_activity(activities_list[0]))
+            delete_menu.addAction(activities_list[1].get_name(), lambda: self.delete_activity(activities_list[1]))
+            delete_menu.addAction(activities_list[2].get_name(), lambda: self.delete_activity(activities_list[2]))
+            delete_menu.addAction(activities_list[3].get_name(), lambda: self.delete_activity(activities_list[3]))
+            delete_menu.addAction(activities_list[4].get_name(), lambda: self.delete_activity(activities_list[4]))
+
+        except IndexError:
+            pass
+
+        self.delete_btn.setMenu(delete_menu)
+
+
+    def rename_dialog(self, activity):
+        """
+        This method creates an InputDialog to get the new_name for the activities
+
+        See method edit_btn_widget().
+        """
+        activity_name, ok = QInputDialog.getText(self, 'Rename Activity',
+                                        'Enter new activity name:')
+
+        if ok:
+            activity.edit_name(activity_name)
+
+
+    def delete_activity(self, activity):
+        """
+        This method deletes an activity in the list of activities of the dayTask object.
+
+        Before performing the delete action, it shows a pop up windows to get the confirmation from the user.
+        """
+        confirmation_box = QMessageBox()
+        confirmation_box.setIcon(QMessageBox.Critical)
+        confirmation_box.setWindowTitle("Confirm Activity Deletion")
+        confirmation_box.setText("Deleted activities can't be recovered.\nThis action is permanent and can't be undone.")
+        confirmation_box.setInformativeText("Do you want to proceed?")
+        confirmation_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirmation_box.setDefaultButton(QMessageBox.Yes)
+        confirmation = confirmation_box.exec()
+
+        if confirmation == QMessageBox.Yes:
+            self.dayTask.delete_activities(activity)
 
 
     def closeEvent(self, event):
@@ -309,11 +532,16 @@ class GUI(QWidget):
             value[1].setText(key.set_time_format(format))
 
     
-    def change_time_expression(self, format):
+    def update_btn_functionality(self):
         """
-        This method changes the value of self.time_format, which will also changes the time expression in the GUI widget.
+        This method updates the functionality of all the buttons in method main_btn() and other_btn() so that the menu inside these buttons will show the new activities options when new activities are added
         """
-        self.time_format = format
+        self.start_btn_widget()
+        self.stop_btn_widget()
+        self.reset_btn_widget()
+        self.restart_btn_widget()
+        self.edit_btn_widget()
+        self.delete_btn_widget()
 
 
     def updateAll(self):
@@ -321,5 +549,6 @@ class GUI(QWidget):
         This method combines different updates of the backend info vs GUI widget display, and it makes all these updates at once
         """
         self.update_activity_info()
+        self.update_btn_functionality()
 
 

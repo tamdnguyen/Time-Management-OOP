@@ -39,9 +39,6 @@ def main():
     activity_5.get_timer().start()
     activity_4.get_timer().start()
     activity_6.get_timer().start()
-    sleep(5)
-    print(activity_3)
-    print(activity_5)
 
     allTask.add_days(today_day_task)
     allTask.add_days(tomorrow_day_task)
