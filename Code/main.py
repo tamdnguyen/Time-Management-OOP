@@ -11,7 +11,9 @@ from date_generator import DateGenerator
 
 
 def main():
-    
+    """
+    TODO: Write the official main
+    """
     allTask = AllTask()
 
     today_day_task = DayTask(Date.today())

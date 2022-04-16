@@ -1,3 +1,4 @@
+from queue import PriorityQueue
 from random import expovariate
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
@@ -37,7 +38,7 @@ class GUI(QWidget):
         This method set the windows of the app
         and put it in the center of the screen
         """
-        self.resize(500, 500)
+        self.resize(600, 600)
         self.center()
 
         self.setWindowTitle('Time Management App')
@@ -172,6 +173,8 @@ class GUI(QWidget):
         self.stop_btn_widget()
         self.reset_btn_widget()
         self.restart_btn_widget()
+
+        # TODO: Create graph and pop up window show Statistics
 
 
     def otherbutton_widget(self, otherbutton_layout):
@@ -437,8 +440,6 @@ class GUI(QWidget):
     def delete_btn_widget(self):
         """
         This method creates the content and adds functionality for the Edit button on the GUI
-
-        TODO: Change the label of the activity_* and activity_*_time to the default after deleting
         """
         activities_list = self.dayTask.get_activities()
 
@@ -460,6 +461,8 @@ class GUI(QWidget):
     def more_btn_widget(self):
         """
         This method creates the content and adds functionality for the More button on the GUI
+
+        TODO: Import, Next Day, Choose Day buttons
         """
         more_menu = QMenu(self)
 
@@ -480,7 +483,7 @@ class GUI(QWidget):
         help_box = QMessageBox()
         help_box.setIcon(QMessageBox.Information)
         help_box.setWindowTitle("Help Function")
-        help_box.setText("Exported files are in CSV type and are\nbest viewed with Excel. For visualizing data,\nplease use Stats button in the app instead.\nExported file can be found in folder time_data.")
+        help_box.setText("")
         
 
 
@@ -525,7 +528,7 @@ class GUI(QWidget):
         export_box = QMessageBox()
         export_box.setIcon(QMessageBox.Question)
         export_box.setWindowTitle("Confirm Exporting Data")
-        export_box.setText("Exported files are in CSV type and are\nbest viewed with Excel.For visualizing data,\nplease use Stats button in the app instead.\nExported file can be found in folder time_data.")
+        export_box.setText("Exported files are in CSV type and are best\nviewed with Excel. For visualizing data,\nplease use Stats button in the app instead.\nExported file can be found in folder time_data.")
         export_box.setInformativeText("Do you want to proceed?")
         export_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         export_box.setDefaultButton(QMessageBox.Yes)
@@ -538,18 +541,32 @@ class GUI(QWidget):
 
     def closeEvent(self, event):
         """
-        This method confirms if the user wants to quit or not
-
-        TODO: Add a save button to export the data file like the Word exit
+        This method confirms if the user wants to quit with save or quite without save or not quit
         """
-        reply = QMessageBox.question(self, 'Message',
-                                     "Save the time management data?", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
+        reply = QMessageBox()
+        reply.setIcon(QMessageBox.Question)
+        reply.setWindowTitle("Confirm quit")
+        reply.setText("Save the time management data?")
+        reply.setStandardButtons(QMessageBox.Save | 
+                                QMessageBox.Discard | 
+                                QMessageBox.Cancel)
+        reply.setDefaultButton(QMessageBox.Save)
 
-        if reply == QMessageBox.Yes:
+        discard_btn = reply.button(QMessageBox.Discard)
+        discard_btn.setText("Don't Save")
+        action = reply.exec()
+
+        if action == QMessageBox.Save:
+            self.dayTask.export_data()
+            self.dayTask.get_allTask().export_file()
+            print("Save")
             event.accept()
-        else:
+        elif action == QMessageBox.Cancel:
+            print("Cancel")
             event.ignore()
+        else:
+            print("Don't Save")
+            event.accept()
 
 
     def center(self):
@@ -567,6 +584,12 @@ class GUI(QWidget):
         This method updates the name and the timer of the activities in the dayTask object and shows it in the corresponding GUI widget
 
         This method also shows the time according to the time expression user choose.
+
+        The method also checks for the QLabel that are not mapped to some activities, and then will set the name of that QLabel to the original names.
+
+        So to understand this method, read the small comments below to see how the method is divided into 2 parts:
+            - first part is for showing the name + timer for the QLabel widgets that are mapped to the activities
+            - second part is for renaming the QLabel widgets that are not mapped to any activities
         """
 
         """
@@ -575,6 +598,8 @@ class GUI(QWidget):
 
         See method change_time_expression()
         """
+
+        # FIRST PART: Displaying name + timer for QLabel that are mapped to activity
         format = self.time_format
 
         activity_widget_dict = self.activity_widget_dict()
@@ -582,6 +607,15 @@ class GUI(QWidget):
         for key, value in activity_widget_dict.items():
             value[0].setText(key.get_name())
             value[1].setText(key.set_time_format(format))
+
+        # SECOND PART: Reset the text display for QLabel that aren't mapped to activity
+        default_activity_label_list = list(self.index_widget_dict().values())
+        actual_activity_label_list = list(activity_widget_dict.values())
+
+        for label in default_activity_label_list:
+            if label not in actual_activity_label_list:
+                label[0].setText("Untitled")
+                label[1].setText("00:00:00")
 
     
     def update_btn_functionality(self):
