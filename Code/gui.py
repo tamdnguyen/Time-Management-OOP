@@ -1,24 +1,23 @@
-from queue import PriorityQueue
-from random import expovariate
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
     QPushButton, QLabel, QMenu,
     QGridLayout, QHBoxLayout, QVBoxLayout,
     QInputDialog, QAction)
-from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import Qt, QTimer
 from activity import Activity
+from gui_help import HelpGUI
 
 
 class GUI(QWidget):
     """
-    The class GUI create the graphical user interface of the program using PyQt5
+    The class GUI creates the graphical user interface of the program using PyQt5
     """
     def __init__(self, dayTask):
         """
         This method creates the initial GUI of the program
         """
         super().__init__()
+        self.help = None # No help window is displayed
         self.dayTask = dayTask
 
         self.layout()
@@ -48,9 +47,6 @@ class GUI(QWidget):
     def layout(self):
         """
         This method creates a layout for the program
-
-        The widget will initially be a Color widget (see class Color above)
-        However, the widget can be changed later to add the real widget we want
         """
         app_layout  = QVBoxLayout() # this is the outermost layout which contains every childLayout
 
@@ -62,7 +58,7 @@ class GUI(QWidget):
 
         otherbutton_layout = QHBoxLayout() # This section is for the other buttons: show day, next day, export, import 
 
-        # add the widet to the sections' layout
+        # add the widget to the sections' layout
         self.title_widget(title_layout)
         self.activity_widget(activity_layout)
         self.mainbutton_widget(mainbutton_layout)
@@ -202,7 +198,7 @@ class GUI(QWidget):
         self.edit_btn_widget()
         self.delete_btn_widget()
         self.more_btn_widget()
-        self.help_btn_widget()
+        self.help_btn.clicked.connect(self.help_btn_widget)
 
 
     def index_widget_dict(self):
@@ -480,10 +476,9 @@ class GUI(QWidget):
 
         TODO: Add content for help button
         """
-        help_box = QMessageBox()
-        help_box.setIcon(QMessageBox.Information)
-        help_box.setWindowTitle("Help Function")
-        help_box.setText("")
+        if self.help is None:
+            self.help_box = HelpGUI()
+        self.help_box.show()
         
 
 

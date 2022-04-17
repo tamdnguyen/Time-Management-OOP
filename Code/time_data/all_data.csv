@@ -1,6 +1,8 @@
 NOTE: Exported file is in CSV type and is best viewed with Excel. For visualizing data, please use Stats button in the app instead.
 Date,Activity,Time (in second)
-16-04-2022,activity_1,10.909800052642822
-16-04-2022,activity_2,1.0
-16-04-2022,activity_3,44.16910791397095
-14-04-2022,activity_6,43.16910791397095
+17-04-2022,activity_1,10.909800052642822
+17-04-2022,activity_2,1.0
+17-04-2022,activity_3,641.0539827346802
+14-04-2022,activity_4,650.1460127830505
+14-04-2022,activity_5,740.0539827346802
+14-04-2022,activity_6,640.0539827346802
