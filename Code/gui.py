@@ -473,8 +473,6 @@ class GUI(QWidget):
     def help_btn_widget(self):
         """
         This method shows a pop up windows to show some guidance for the user.
-
-        TODO: Add content for help button
         """
         if self.help is None:
             self.help_box = HelpGUI()
