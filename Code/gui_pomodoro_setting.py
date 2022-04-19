@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QLineEdit, QDateEdit, QFormLayout, QWidget, QDesktopWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QLineEdit, QDateEdit, QFormLayout, QWidget, QDesktopWidget, QLabel, QHBoxLayout
 
 from PyQt5.QtCore import QDate, pyqtSignal
 
@@ -23,7 +23,15 @@ class PomodoroSettingGUI(QDialog):
     def init_UI(self):
         """
         This method creates a layout and add the widgets to the pop up window dialog
+
+        The layout will be QFormLayout, and the form will include:
+            - label with an instruction about the pomodoro technique
+            - input for worktime
+            - input for resttime
+            - Buttons layout: 2 button OK + Cancel
         """
+
+        # Label for instruction
         self.introduction = QLabel("The Pomodoro Technique was invented in the early 1990s by developer, entrepreneur, and author Francesco Cirillo. The methodology is simple: When faced with any large task or series of tasks, break the work down into short, timed intervals (called “Pomodoros”) that are spaced out by short breaks.<br><br>\
         Five steps to get started with Pomodoro:\
             <ol>\
@@ -36,11 +44,16 @@ class PomodoroSettingGUI(QDialog):
         However, the default 25-5 setting is too short for some people (e.g., they prefer longer periods like 50-10). Therefore, this app allows the users to choose their suitable workng time and rest time.")
         self.introduction.setWordWrap(True)
 
+        # Input for worktime
         self.worktime = QLineEdit()
         self.worktime.textEdited[str].connect(self.unlock)
 
+        # Input for resttime
         self.resttime = QLineEdit()
         self.resttime.textEdited[str].connect(self.unlock)
+
+        # Button layout with 2 buttons: OK + Cancel
+        self.button_layout = QHBoxLayout()
 
         self.ok_btn = QPushButton('OK')
         self.ok_btn.setDisabled(True)
@@ -48,11 +61,15 @@ class PomodoroSettingGUI(QDialog):
 
         self.cancel_btn = QPushButton("Cancel")
 
+        self.button_layout.addWidget(self.ok_btn)
+        self.button_layout.addWidget(self.cancel_btn)
+
+        # create the layout of the app and add the rows to the layout
         form = QFormLayout(self)
         form.addRow(self.introduction)
         form.addRow('Working Time', self.worktime)
         form.addRow('Resting Time', self.resttime)
-        form.addRow(self.ok_btn, self.cancel_btn)
+        form.addRow(self.button_layout)
 
 
     def unlock(self, text):
