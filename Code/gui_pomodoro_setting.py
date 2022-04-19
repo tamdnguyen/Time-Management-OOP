@@ -60,6 +60,7 @@ class PomodoroSettingGUI(QDialog):
         self.ok_btn.clicked.connect(self.ok_pressed)
 
         self.cancel_btn = QPushButton("Cancel")
+        self.cancel_btn.clicked.connect(self.close)
 
         self.button_layout.addWidget(self.ok_btn)
         self.button_layout.addWidget(self.cancel_btn)
@@ -72,19 +73,51 @@ class PomodoroSettingGUI(QDialog):
         form.addRow(self.button_layout)
 
 
-    def unlock(self, text):
-        # TODO: add another method check for both worktime and resttime
-        if text:
+    def checked_worktime(self, qlineedit):
+        """
+        This method checks if the worktime input has been filled in or not
+        
+        Return:
+            - True if the worktime QLineEdit has been filled
+            - False otherwise
+        """
+        if qlineedit.text() != "":
+            return True
+        else:
+            return False
+
+    
+    def checked_resttime(self, qlineedit):
+        """
+        This method checks if the resttime input has been filled in or not
+        
+        Return:
+            - True if the resttime QLineEdit has been filled
+            - False otherwise
+        """
+        if qlineedit.text() != "":
+            return True
+        else:
+            return False
+
+
+    def unlock(self):
+        """
+        This method unlock the OK button when both worktime and resttime QLineEdit are filled in"""
+        # TODO: calling the method to activate the OK button
+        if self.checked_worktime(self.worktime) and self.checked_resttime(self.resttime):
             self.ok_btn.setEnabled(True)
         else:
             self.ok_btn.setDisabled(True)
 
 
     def ok_pressed(self):
-        values = {'Date': self.date.date(),
-                  'File': self.file_name.text(),
-                  'Printer': self.printer_name.text()}
-        self.accepted.emit(values)
+        """
+        This method executes the window and sends the pomodoro setting information when the OK button is pressed
+        """
+        pomodoro_settings = {'worktime': self.worktime.text(),
+                  'resttime': self.resttime.text()}
+        self.accepted.emit(pomodoro_settings)
         self.accept()
 
 
@@ -93,7 +126,7 @@ class PomodoroSettingGUI(QDialog):
         This method set the windows of the app
         and put it in the center of the screen
         """
-        self.resize(400, 350)
+        self.resize(450, 450)
         self.center()
 
         self.setWindowTitle('Help Information')
@@ -111,9 +144,27 @@ class PomodoroSettingGUI(QDialog):
 
 
 
+class Template(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        dg = PomodoroSettingGUI()
+        dg.accepted.connect(self.do_something)
+        dg.exec()
+
+    def do_something(self, values):
+        print(values)
+
+
+app = QApplication(sys.argv)
+gui = Template()
+sys.exit(app.exec_())
+
+
 def main():
     app = QApplication(sys.argv)
     settng = PomodoroSettingGUI()
+    print(settng.accepted)
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
