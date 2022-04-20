@@ -13,15 +13,21 @@ class Pomodoro(Timer):
     The Pomodoro will work as a seperate timer of the app and will automatically run
     along with the program.
 
+    Parameter:
+        - activities_list: list of activities of the dayTask that GUI is displaying
+        - worktime: work time in minute
+        - resttime: rest time in minute
+
     NOTE: in the pop up windows for creating a Pomodoro, add the note of briefly explaining
     about Pomodoro technique, and then suggest default time is 25min worktime - 5min resttime
     """
-    def __init__(self, worktime, resttime, countFrom=0):
+    def __init__(self, activities_list, worktime, resttime, countFrom=0):
         super().__init__(countFrom)
         self._start += countFrom
 
         self._worktime = worktime * 60
         self._resttime = resttime * 60
+        self.activities_list = activities_list
         self.cycle = 0 # one work + one rest = 2 cycle
         self.working = True
         self.start()
@@ -45,6 +51,22 @@ class Pomodoro(Timer):
         return self._resttime
 
 
+    def resume_activity(self):
+        """
+        This method resumes the timer of the activities in the activities_list
+        """
+        for activity in self.activities_list:
+            activity.get_timer().start()
+
+    
+    def pause_activity(self):
+        """
+        This method pauses the timer of the activities in the activities_list
+        """
+        for activity in self.activities_list:
+            activity.get_timer().stop()
+
+
     def get_rest(self):
         """
         This method checks if users have worked for worktime s, then create a notification for resting
@@ -54,6 +76,7 @@ class Pomodoro(Timer):
             if math.isclose(self.duration, self.worktime, rel_tol=(1/self.worktime)):
                 self.cycle += 1
                 self.working = False
+                self.pause_activity()
                 
                 rest_noti = QMessageBox()
                 rest_noti.setIcon(QMessageBox.Warning)
@@ -73,6 +96,7 @@ class Pomodoro(Timer):
             if math.isclose(self.duration, self.resttime, rel_tol=(1/self.resttime)):
                 self.cycle += 1
                 self.working = True
+                self.resume_activity()
                 
                 work_noti = QMessageBox()
                 work_noti.setIcon(QMessageBox.Warning)

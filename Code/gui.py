@@ -505,7 +505,7 @@ class GUI(QWidget):
         worktime = int(values["worktime"])
         resttime = int(values["resttime"])
 
-        self.pomodoro_reminder = Pomodoro(worktime, resttime)
+        self.pomodoro_reminder = Pomodoro(self.dayTask.get_activities(), worktime, resttime)
 
 
 
