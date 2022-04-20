@@ -463,9 +463,7 @@ class GUI(QWidget):
 
     def pomodoro_btn_widget(self):
         """
-        This method creates a pop up window to ask for pomodoro setting and then 
-
-        TODO: Debug this method + pomodoro related methods
+        This method creates a pop up window to ask for pomodoro setting and then
         """
         if self.pomodoro is None:
             self.pomodoro_setting = PomodoroSettingGUI()

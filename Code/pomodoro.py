@@ -32,16 +32,6 @@ class Pomodoro(Timer):
         self.working = True
         self.start()
 
-        """
-        # Set a timer to call the update function periodically
-        # TODO: Create some function to update the object every second
-        self.timer = Timer()
-        self.timer.timeout.connect(self.updateAll)
-        self.timer.start(1000) # Update the time on the screen after every second
-
-        # TODO: Create a input-getter in GUI to get worktime and resttime value for pomodoro
-        """
-
     @property
     def worktime(self):
         return self._worktime
@@ -70,7 +60,6 @@ class Pomodoro(Timer):
     def get_rest(self):
         """
         This method checks if users have worked for worktime s, then create a notification for resting
-        TODO: Add OK + Cancel button => send message to GUI => pause/resume the activity timer
         """
         if self.working:
             if math.isclose(self.duration, self.worktime, rel_tol=(1/self.worktime)):
@@ -89,22 +78,32 @@ class Pomodoro(Timer):
     def get_work(self):
         """
         This method checks if users have rested for resttime s, then create a notification for working
-
-        TODO: Check cycle to add long break after 4 pomodoro cycle
         """
         if not self.working:
-            if math.isclose(self.duration, self.resttime, rel_tol=(1/self.resttime)):
-                self.cycle += 1
-                self.working = True
-                self.resume_activity()
-                
-                work_noti = QMessageBox()
-                work_noti.setIcon(QMessageBox.Warning)
-                work_noti.setWindowTitle("Back to Work Notification")
-                work_noti.setText("{:d}-minute break is over. It's time to get back to work!".format(self.resttime//60))
-                work_noti.exec()
+            if self.cycle % 4 != 0:
+                if math.isclose(self.duration, self.resttime, rel_tol=(1/self.resttime)):
+                    self.working = True
+                    self.resume_activity()
+                    
+                    work_noti = QMessageBox()
+                    work_noti.setIcon(QMessageBox.Warning)
+                    work_noti.setWindowTitle("Back to Work Notification")
+                    work_noti.setText("{:d}-minute break is over. It's time to get back to work!".format(self.resttime//60))
+                    work_noti.exec()
 
-                self.restart()
+                    self.restart()
+            else:
+                if math.isclose(self.duration, self.resttime*6, rel_tol=(1/self.resttime)):
+                    self.working = True
+                    self.resume_activity()
+                    
+                    work_noti = QMessageBox()
+                    work_noti.setIcon(QMessageBox.Warning)
+                    work_noti.setWindowTitle("Back to Work Notification")
+                    work_noti.setText("{:d}-minute break is over. It's time to get back to work!".format(self.resttime//60))
+                    work_noti.exec()
+
+                    self.restart()
 
     def updateAll(self):
         self.get_rest()

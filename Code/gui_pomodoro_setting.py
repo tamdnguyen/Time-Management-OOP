@@ -104,7 +104,6 @@ class PomodoroSettingGUI(QDialog):
     def unlock(self):
         """
         This method unlock the OK button when both worktime and resttime QLineEdit are filled in"""
-        # TODO: calling the method to activate the OK button
         if self.checked_worktime(self.worktime) and self.checked_resttime(self.resttime):
             self.ok_btn.setEnabled(True)
         else:
