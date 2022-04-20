@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QTimer
 from activity import Activity
 from gui_help import HelpGUI
+from gui_pomodoro_setting import PomodoroSettingGUI
+from pomodoro import Pomodoro
 
 
 class GUI(QWidget):
@@ -18,6 +20,10 @@ class GUI(QWidget):
         """
         super().__init__()
         self.help = None # No help window is displayed
+
+        self.pomodoro = None # No pomodoro reminder is turned on
+        self.pomodoro_reminder = None
+
         self.dayTask = dayTask
 
         self.layout()
@@ -197,6 +203,7 @@ class GUI(QWidget):
         # add functionality for the buttons
         self.edit_btn_widget()
         self.delete_btn_widget()
+        self.pomodoro_btn.clicked.connect(self.pomodoro_btn_widget)
         self.more_btn_widget()
         self.help_btn.clicked.connect(self.help_btn_widget)
 
@@ -454,6 +461,18 @@ class GUI(QWidget):
         self.delete_btn.setMenu(delete_menu)
 
 
+    def pomodoro_btn_widget(self):
+        """
+        This method creates a pop up window to ask for pomodoro setting and then 
+
+        TODO: Debug this method + pomodoro related methods
+        """
+        if self.pomodoro is None:
+            self.pomodoro_setting = PomodoroSettingGUI()
+            
+        self.pomodoro_setting.accepted.connect(self.create_pomodoro)
+        self.pomodoro_setting.show()
+        
     def more_btn_widget(self):
         """
         This method creates the content and adds functionality for the More button on the GUI
@@ -478,6 +497,16 @@ class GUI(QWidget):
             self.help_box = HelpGUI()
         self.help_box.show()
         
+
+    def create_pomodoro(self, values):
+        """
+        This method creates a pomodoro with the given configuration
+        """
+        worktime = int(values["worktime"])
+        resttime = int(values["resttime"])
+
+        self.pomodoro_reminder = Pomodoro(worktime, resttime)
+
 
 
     def rename_dialog(self, activity):
@@ -622,6 +651,14 @@ class GUI(QWidget):
         self.edit_btn_widget()
         self.delete_btn_widget()
 
+    
+    def update_pomodoro(self):
+        """
+        This method updates the timer in Pomodoro along with the app, and Pomodoro will send notification if it counts to the working time or the restting time
+        """
+        if self.pomodoro_reminder != None:
+            self.pomodoro_reminder.updateAll()
+
 
     def updateAll(self):
         """
@@ -629,5 +666,7 @@ class GUI(QWidget):
         """
         self.update_activity_info()
         self.update_btn_functionality()
+        self.update_pomodoro()
+        
 
 

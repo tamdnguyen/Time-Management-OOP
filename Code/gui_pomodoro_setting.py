@@ -68,8 +68,8 @@ class PomodoroSettingGUI(QDialog):
         # create the layout of the app and add the rows to the layout
         form = QFormLayout(self)
         form.addRow(self.introduction)
-        form.addRow('Working Time', self.worktime)
-        form.addRow('Resting Time', self.resttime)
+        form.addRow('Working Time (min)', self.worktime)
+        form.addRow('Resting Time (min)', self.resttime)
         form.addRow(self.button_layout)
 
 
@@ -130,7 +130,7 @@ class PomodoroSettingGUI(QDialog):
         self.center()
 
         self.setWindowTitle('Help Information')
-        self.show()
+        #self.show()
 
     
     def center(self):
@@ -143,6 +143,8 @@ class PomodoroSettingGUI(QDialog):
         self.move(qr.topLeft())
 
 
+"""
+The lines below are for testing this GUI
 
 class Template(QWidget):
 
@@ -150,10 +152,10 @@ class Template(QWidget):
         super().__init__()
         dg = PomodoroSettingGUI()
         dg.accepted.connect(self.do_something)
-        dg.exec()
+        dg.exec_()
 
     def do_something(self, values):
-        print(values)
+        print(values['File'], values['Date'], values['Printer'])
 
 
 app = QApplication(sys.argv)
@@ -169,3 +171,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""
+

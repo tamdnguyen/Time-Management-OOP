@@ -22,8 +22,8 @@ class Pomodoro(Timer):
 
         self._worktime = worktime * 60
         self._resttime = resttime * 60
-        self._cycle = 0 # one work + one rest = 2 cycle
-        self._working = True
+        self.cycle = 0 # one work + one rest = 2 cycle
+        self.working = True
         self.start()
 
         """
@@ -44,20 +44,14 @@ class Pomodoro(Timer):
     def resttime(self):
         return self._resttime
 
-    @property
-    def cycle(self):
-        return self._cycle
-
-    @property
-    def working(self):
-        return self._working
 
     def get_rest(self):
         """
         This method checks if users have worked for worktime s, then create a notification for resting
+        TODO: Add OK + Cancel button => send message to GUI => pause/resume the activity timer
         """
         if self.working:
-            if math.isclose(self.duration, self.worktime, rel_tol=1):
+            if math.isclose(self.duration, self.worktime, rel_tol=(1/self.worktime)):
                 self.cycle += 1
                 self.working = False
                 
@@ -76,7 +70,7 @@ class Pomodoro(Timer):
         TODO: Check cycle to add long break after 4 pomodoro cycle
         """
         if not self.working:
-            if math.isclose(self.duration, self.resttime, rel_tol=1):
+            if math.isclose(self.duration, self.resttime, rel_tol=(1/self.resttime)):
                 self.cycle += 1
                 self.working = True
                 
@@ -88,12 +82,11 @@ class Pomodoro(Timer):
 
                 self.restart()
 
-    def update_pomodoro(self):
+    def updateAll(self):
         self.get_rest()
         self.get_work()
 
 
-pomodoro = Pomodoro(0.1, 0.1)
 
     
 
