@@ -9,6 +9,7 @@ from day_task import DayTask
 from activity import Activity
 from gui_help import HelpGUI
 from gui_pomodoro_setting import PomodoroSettingGUI
+from gui_choose_day import ChooseDaySettingGUI
 from pomodoro import Pomodoro
 from date import Date
 
@@ -475,17 +476,18 @@ class GUI(QWidget):
         self.pomodoro_setting.accepted.connect(self.create_pomodoro)
         self.pomodoro_setting.show()
         
+
     def more_btn_widget(self):
         """
         This method creates the content and adds functionality for the More button on the GUI
 
-        TODO: Next Day, Choose Day buttons
+        TODO: Choose Day buttons
         """
         more_menu = QMenu(self)
 
         more_menu.addAction("Export", lambda: self.export_btn())
         more_menu.addAction("Next Day", lambda: self.next_day_btn())
-        more_menu.addAction("Choose Day", lambda: self.export_btn())
+        more_menu.addAction("Choose Day", lambda: self.choose_day_btn())
 
         self.more_btn.setMenu(more_menu)
 
@@ -587,6 +589,30 @@ class GUI(QWidget):
         next_day_dayTask = self.allTask.add_days(DayTask(Date(tomorrow_year, tomorrow_month, tomorrow_day)))
 
         self.next_day = GUI(next_day_dayTask)
+
+    def choose_day_btn(self):
+        """
+        This method creates a pop up window that allow users to choose the day they want to open the app
+        """
+        self.choose_day_setting = ChooseDaySettingGUI()
+
+        self.choose_day_setting.accepted.connect(self.choose_day)
+        self.choose_day_setting.show()
+
+
+    def choose_day(self, values):
+        """
+        This method creates a new windows that show the data of the chosen day from user
+
+        See documentation of AllTask, ChooseDaySettingGUI
+        """
+        chosen_day = int(values["day"])
+        chosen_month = int(values["month"])
+        chosen_year = int(values["year"])
+
+        choose_day_dayTask = self.allTask.add_days(DayTask(Date(chosen_year, chosen_month, chosen_day)))
+
+        self.choose_day_GUI = GUI(choose_day_dayTask) 
 
 
     def closeEvent(self, event):
