@@ -28,7 +28,7 @@ class DateGenerator:
         day = int(date_data[0])
         month = int(date_data[1])
         year = int(date_data[2])
-
+        
         corresponding_date = Date(year, month, day)
 
         return corresponding_date

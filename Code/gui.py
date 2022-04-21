@@ -1,13 +1,16 @@
+import datetime
 from PyQt5.QtWidgets import (
     QWidget, QDesktopWidget, QMessageBox, 
     QPushButton, QLabel, QMenu,
     QGridLayout, QHBoxLayout, QVBoxLayout,
     QInputDialog, QAction)
 from PyQt5.QtCore import Qt, QTimer
+from day_task import DayTask
 from activity import Activity
 from gui_help import HelpGUI
 from gui_pomodoro_setting import PomodoroSettingGUI
 from pomodoro import Pomodoro
+from date import Date
 
 
 class GUI(QWidget):
@@ -25,6 +28,7 @@ class GUI(QWidget):
         self.pomodoro_reminder = None
 
         self.dayTask = dayTask
+        self.allTask = self.dayTask.get_allTask()
 
         self.layout()
         self.init_windows()
@@ -480,7 +484,7 @@ class GUI(QWidget):
         more_menu = QMenu(self)
 
         more_menu.addAction("Export", lambda: self.export_btn())
-        more_menu.addAction("Next Day", lambda: self.export_btn())
+        more_menu.addAction("Next Day", lambda: self.next_day_btn())
         more_menu.addAction("Choose Day", lambda: self.export_btn())
 
         self.more_btn.setMenu(more_menu)
@@ -503,7 +507,6 @@ class GUI(QWidget):
         resttime = int(values["resttime"])
 
         self.pomodoro_reminder = Pomodoro(self.dayTask.get_activities(), worktime, resttime)
-
 
 
     def rename_dialog(self, activity):
@@ -556,6 +559,34 @@ class GUI(QWidget):
         if confirmation == QMessageBox.Yes:
             self.dayTask.export_data()
             self.dayTask.get_allTask().export_file()
+
+
+    def next_day_btn(self):
+        """
+        This method creates a new windows that show the data of the next day of the current date of dayTask object
+        """
+
+        """
+        First, we need to create a dayTask that uses parameter "tomorrow date" (tomorrow here means the tomorrow of the current date of the dayTask which is being displayed in the main)
+        
+        We can achieve the date of the tomorrow by using command:
+            datetime.date.today() + datetime.timedelta(days=1)
+        Then we create dayTask object of tomorrow:
+            DayTask(datetime.date.today() + datetime.timedelta(days=1))
+        Finally we use method add_days() of class AllTask to see if the dayTask of tomorrow existed or not:
+            - if yes then use that dayTask object
+            - if no then create new dayTask object of tomorrow and add to the list of dayTask
+
+        See the documentation of AllTask.
+        """
+        tomorrow_date = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrow_day = tomorrow_date.day
+        tomorrow_month = tomorrow_date.month
+        tomorrow_year = tomorrow_date.year
+
+        next_day_dayTask = self.allTask.add_days(DayTask(Date(tomorrow_year, tomorrow_month, tomorrow_day)))
+
+        self.next_day = GUI(next_day_dayTask)
 
 
     def closeEvent(self, event):

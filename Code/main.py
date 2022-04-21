@@ -16,7 +16,6 @@ def main():
 
     today_day_task = allTask.add_days(DayTask(Date.today()))
 
-
     app = QApplication(sys.argv)
     gui = GUI(today_day_task)
     sys.exit(app.exec_())
