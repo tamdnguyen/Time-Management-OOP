@@ -80,7 +80,6 @@ class AllTask():
             file = open(filename, "r")
             linelist = file.readlines()
             file.close()
-            print(linelist)
 
             for line in linelist[2:]:
                 line = line.strip()

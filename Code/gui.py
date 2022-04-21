@@ -475,12 +475,11 @@ class GUI(QWidget):
         """
         This method creates the content and adds functionality for the More button on the GUI
 
-        TODO: Import, Next Day, Choose Day buttons
+        TODO: Next Day, Choose Day buttons
         """
         more_menu = QMenu(self)
 
         more_menu.addAction("Export", lambda: self.export_btn())
-        more_menu.addAction("Import", lambda: self.export_btn())
         more_menu.addAction("Next Day", lambda: self.export_btn())
         more_menu.addAction("Choose Day", lambda: self.export_btn())
 
@@ -579,13 +578,10 @@ class GUI(QWidget):
         if action == QMessageBox.Save:
             self.dayTask.export_data()
             self.dayTask.get_allTask().export_file()
-            print("Save")
             event.accept()
         elif action == QMessageBox.Cancel:
-            print("Cancel")
             event.ignore()
         else:
-            print("Don't Save")
             event.accept()
 
 

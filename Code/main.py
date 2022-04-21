@@ -11,44 +11,14 @@ from date_generator import DateGenerator
 
 
 def main():
-    """
-    TODO: Write the official main
-    
-    """
     allTask = AllTask()
+    allTask.import_file("Code/time_data/all_data.csv")
 
-    today_day_task = DayTask(Date.today())
+    today_day_task = allTask.add_days(DayTask(Date.today()))
 
-    activity_1 = Activity("activity_1", 10.9098)
-    activity_2 = Activity("activity_2", 1)
-    activity_3 = Activity("activity_3", 1)
-
-    today_day_task.add_activities(activity_1)
-    today_day_task.add_activities(activity_2)
-    today_day_task.add_activities(activity_3)
-
-    tomorrow_day_task = DayTask(DateGenerator("14-04-2022.csv"[:-4]).create_date())
-    activity_4 = Activity("activity_4", 10.09203)
-    activity_5 = Activity("activity_5", 100)
-    activity_6 = Activity("activity_6")
-
-    tomorrow_day_task.add_activities(activity_4)
-    tomorrow_day_task.add_activities(activity_5)
-    tomorrow_day_task.add_activities(activity_6)
-
-
-    print(activity_3)
-    print(activity_5)
-    activity_3.get_timer().start()
-    activity_5.get_timer().start()
-    activity_4.get_timer().start()
-    activity_6.get_timer().start()
-
-    allTask.add_days(today_day_task)
-    allTask.add_days(tomorrow_day_task)
 
     app = QApplication(sys.argv)
-    gui = GUI(tomorrow_day_task)
+    gui = GUI(today_day_task)
     sys.exit(app.exec_())
     
 
