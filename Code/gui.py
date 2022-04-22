@@ -10,6 +10,7 @@ from activity import Activity
 from gui_help import HelpGUI
 from gui_pomodoro_setting import PomodoroSettingGUI
 from gui_choose_day import ChooseDaySettingGUI
+from gui_statistics import StatisticsGUI
 from pomodoro import Pomodoro
 from date import Date
 
@@ -180,6 +181,7 @@ class GUI(QWidget):
         self.stop_btn_widget()
         self.reset_btn_widget()
         self.restart_btn_widget()
+        self.stats_btn.clicked.connect(self.stats_btn_widget)
 
         # TODO: Create graph and pop up window show Statistics
 
@@ -265,6 +267,8 @@ class GUI(QWidget):
     def add_activity(self):
         """
         This method shows a pop up windows to ask for the name of the activity and create new activity for the program
+
+        TODO: Fix same name activity
         """
         activity_name, ok = QInputDialog.getText(self, 'Activity Name',
                                         'Enter activity name:')
@@ -422,6 +426,15 @@ class GUI(QWidget):
             pass
 
         self.restart_btn.setMenu(restart_menu)
+
+
+    def stats_btn_widget(self):
+        """
+        This method creates a pop up windows showing the statistics and the visualization when Stats button is clicked
+        """
+        self.statisticsGUI = StatisticsGUI(self.dayTask)
+        self.statisticsGUI.show()
+
 
 
     def edit_btn_widget(self):
@@ -589,6 +602,7 @@ class GUI(QWidget):
         next_day_dayTask = self.allTask.add_days(DayTask(Date(tomorrow_year, tomorrow_month, tomorrow_day)))
 
         self.next_day = GUI(next_day_dayTask)
+
 
     def choose_day_btn(self):
         """

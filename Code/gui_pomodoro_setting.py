@@ -126,7 +126,7 @@ class PomodoroSettingGUI(QDialog):
         self.resize(450, 450)
         self.center()
 
-        self.setWindowTitle('Help Information')
+        self.setWindowTitle('Pomodoro Setting')
         #self.show()
 
     

@@ -85,7 +85,7 @@ class ChooseDaySettingGUI(QWidget):
         self.resize(400, 400)
         self.center()
 
-        self.setWindowTitle('Help Information')
+        self.setWindowTitle('Choose Day')
         #self.show()
 
     
