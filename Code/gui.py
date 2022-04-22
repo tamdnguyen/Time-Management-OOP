@@ -430,11 +430,10 @@ class GUI(QWidget):
 
     def stats_btn_widget(self):
         """
-        This method creates a pop up windows showing the statistics and the visualization when Stats button is clicked
+        This method creates and shows a statistics GUI
         """
         self.statisticsGUI = StatisticsGUI(self.dayTask)
         self.statisticsGUI.show()
-
 
 
     def edit_btn_widget(self):

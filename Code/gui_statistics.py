@@ -1,8 +1,9 @@
 from operator import le
-import PyQt5
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QDesktopWidget,
                             QVBoxLayout, QHBoxLayout,
-                            QTableWidget, QTableWidgetItem)
+                            QTableWidget, QTableWidgetItem,
+                            QLabel, QPushButton)
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import sys
@@ -28,8 +29,86 @@ class StatisticsGUI(QWidget):
         self.init_UI()
 
 
+    def stats_possible(self):
+        """
+        This method checks if the data of the activitiese from the dayTask is available for making statistics or not
+        
+        In other word, when the new dayTask object is newly created, there will be 0 activities. Therefore, there is no data available for creating statistic
+        """
+        if len(self.data_raw) != 0:
+            return True
+        else:
+            return False
+
+
+    def get_data_percentage(self):
+        """
+        This method creates a new dictionary with the key being activities name and values being their timer percentage of contributing to the whole dayTask timer sum
+
+        There are several special case to deal with when all tasks have timer 00:00:00, then calculating percentage is not available
+        """
+        if self.stats_possible():
+            data_percentage = {}
+
+            data = self.data_raw
+            timer_sum = sum(data.values())
+
+            for activity in list(data.keys())[:-1]:
+                try:
+                    data_percentage[activity] = round((data[activity]/timer_sum)*100, 2)
+                except ZeroDivisionError:
+                    data_percentage[activity] = 0.00
+
+            # for the last activity timer, we use 100-(sum of percentage of other activities)
+            sum_so_far = sum(data_percentage.values())
+            last_activity = list(data.keys())[-1]
+
+            if timer_sum != 0:
+                data_percentage[last_activity] = round(100 - sum_so_far, 2)
+            else:
+                data_percentage[last_activity] = 0.00
+
+            return data_percentage
+
+
     def init_UI(self):
         """
+        This method decides which widget will pop up when user clicks the Stats button
+        
+        There are 2 different pop up windows:
+            - Warning Box: if the dayTask object not possible for statistics
+            - StatisticsGUI: otherwise
+        """
+        if self.stats_possible():
+            self.statistics_UI()
+        else:
+            self.warning_UI()
+
+
+    def warning_UI(self):
+        """
+        This method creates the warning windows
+        """
+        self.layout = QVBoxLayout()
+
+        self.warning = QLabel("There is no activity going on. Statistics is currently unavailable.")
+        self.warning.setWordWrap(True)
+        self.warning.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.warning.setStyleSheet('font-size: 18pt;')
+
+        self.ok_btn = QPushButton("OK")
+        self.ok_btn.clicked.connect(lambda: self.close())
+
+        self.layout.addWidget(self.warning)
+        self.layout.addWidget(self.ok_btn)
+
+        self.setLayout(self.layout)
+
+
+    def statistics_UI(self):
+        """
+        This method creates the StatisticsGUI
+
         This method creates a layout and add the widgets to the pop up window widget
         
         The layout will have:
@@ -118,17 +197,28 @@ class StatisticsGUI(QWidget):
 
         self.table_overview.setHorizontalHeaderLabels(["Descriptive Statistics", "Value (s)"])
 
+        # create the item in the table
+        total_time = QTableWidgetItem("{:.2f}".format(self.statistics.sum()))
+        max_time = QTableWidgetItem("{:.2f}".format(self.data_raw[self.statistics.max()[0]]))
+        min_time = QTableWidgetItem("{:.2f}".format(self.data_raw[self.statistics.min()[0]]))
+
+        range_time_list = self.statistics.time_range()
+        range_time_string = "-".join(str(timer_value) for timer_value in range_time_list)
+
+        range_time = QTableWidgetItem(range_time_string)
+        median_time = QTableWidgetItem("{:.2f}".format(self.statistics.median()))
+
         # add the content for the table
         self.table_overview.setItem(0, 0, QTableWidgetItem("Total Time"))
-        self.table_overview.setItem(0, 1, QTableWidgetItem("{:.2f}".format(self.statistics.sum())))
+        self.table_overview.setItem(0, 1, total_time)
         self.table_overview.setItem(1, 0, QTableWidgetItem("Max Time"))
-        self.table_overview.setItem(1, 1, QTableWidgetItem("{:.2f}".format(self.statistics.max())))
+        self.table_overview.setItem(1, 1, max_time)
         self.table_overview.setItem(2, 0, QTableWidgetItem("Min Time"))
-        self.table_overview.setItem(2, 1, QTableWidgetItem("{:.2f}".format(self.statistics.min())))
+        self.table_overview.setItem(2, 1, min_time)
         self.table_overview.setItem(3, 0, QTableWidgetItem("Range"))
-        self.table_overview.setItem(3, 1, QTableWidgetItem("{:.2f}".format(self.statistics.time_range())))
+        self.table_overview.setItem(3, 1, range_time)
         self.table_overview.setItem(4, 0, QTableWidgetItem("Median Time"))
-        self.table_overview.setItem(4, 1, QTableWidgetItem("{:.2f}".format(self.statistics.median())))
+        self.table_overview.setItem(4, 1, median_time)
 
         # Resize of the rows and columns based on the content
         self.table_overview.resizeColumnsToContents()
@@ -145,14 +235,6 @@ class StatisticsGUI(QWidget):
 
         TODO: check when the activities list is empty and deal with that
         """
-        # check if the data is empty then close the windows immediately
-        print(self.data_percentage)
-
-        if self.data_percentage is None:
-            print("is None")
-            self.close()
-            print("not close")
-
         self.resize(400, 400)
         self.center()
 
@@ -168,29 +250,6 @@ class StatisticsGUI(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-
-    def get_data_percentage(self):
-        """
-        This method creates a new dictionary with the key being activities name and values being their timer percentage of contributing to the whole dayTask timer sum
-        """
-        data_percentage = {}
-
-        data = self.data_raw
-        timer_sum = sum(data.values())
-
-        try:
-            for activity in list(data.keys())[:-1]:
-                data_percentage[activity] = round((data[activity]/timer_sum)*100, 2)
-
-            # for the last activity timer, we use 100-(sum of percentage of other activities)
-            sum_so_far = sum(data_percentage.values())
-            last_activity = list(data.keys())[-1]
-
-            data_percentage[last_activity] = 100 - sum_so_far
-        except IndexError:
-            return None
-
-        return data_percentage
 
 """
 def main():
