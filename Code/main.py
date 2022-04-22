@@ -3,11 +3,8 @@ from time import sleep
 from gui import GUI
 from PyQt5.QtWidgets import QApplication
 from day_task import DayTask
-from datetime import date
-from activity import Activity
 from date import Date
 from all_task import AllTask
-from date_generator import DateGenerator
 
 
 def main():

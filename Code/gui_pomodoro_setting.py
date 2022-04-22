@@ -1,8 +1,6 @@
-import sys
+from PyQt5.QtWidgets import QDialog, QPushButton, QLineEdit, QFormLayout, QDesktopWidget, QLabel, QHBoxLayout
 
-from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QLineEdit, QDateEdit, QFormLayout, QWidget, QDesktopWidget, QLabel, QHBoxLayout
-
-from PyQt5.QtCore import QDate, pyqtSignal
+from PyQt5.QtCore import pyqtSignal
 
 class PomodoroSettingGUI(QDialog):
     """

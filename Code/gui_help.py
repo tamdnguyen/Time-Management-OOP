@@ -1,6 +1,6 @@
 import sys, PyQt5
 from PyQt5.QtWidgets import (QWidget, QScrollArea, QDesktopWidget,
-                            QVBoxLayout, QLabel, QMainWindow)
+                            QVBoxLayout, QLabel)
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 

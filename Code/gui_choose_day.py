@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QCalendarWidget, QPushButton,
-                             QLabel, QApplication, QVBoxLayout,
+                             QLabel, QVBoxLayout,
                              QHBoxLayout, QDesktopWidget)
 from PyQt5.QtCore import QDate, Qt, pyqtSignal
-import sys
 
 
 class ChooseDaySettingGUI(QWidget):
