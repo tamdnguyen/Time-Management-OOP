@@ -1,9 +1,13 @@
 from operator import le
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import (QWidget, QDesktopWidget,
                             QVBoxLayout, QHBoxLayout,
                             QTableWidget, QTableWidgetItem,
-                            QLabel, QPushButton)
+                            QLabel, QPushButton,
+                            QScrollArea)
+from PyQt5.QtChart import (QChart, QChartView, QPieSeries, 
+                            QBarSeries, QBarSet, QBarCategoryAxis, QValueAxis)
+from PyQt5.QtGui import QPainter, QPen
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import sys
@@ -11,7 +15,7 @@ import os
 from time_statistics import TimeStatistics
 
 
-class StatisticsGUI(QWidget):
+class StatisticsGUI(QScrollArea):
     """
     The class StatisticsGUI creates a widgets that shows the statistics and visualization of time management data of the GUI app.
     """
@@ -89,11 +93,13 @@ class StatisticsGUI(QWidget):
         """
         This method creates the warning windows
         """
+        self.widget = QWidget() # Widget that contains the collection of Vertical Box
+
         self.layout = QVBoxLayout()
 
-        self.warning = QLabel("There is no activity going on. Statistics is currently unavailable.")
+        self.warning = QLabel("There is no activity going on.\nStatistics is currently unavailable.")
         self.warning.setWordWrap(True)
-        self.warning.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.warning.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.warning.setStyleSheet('font-size: 18pt;')
 
         self.ok_btn = QPushButton("OK")
@@ -102,7 +108,14 @@ class StatisticsGUI(QWidget):
         self.layout.addWidget(self.warning)
         self.layout.addWidget(self.ok_btn)
 
-        self.setLayout(self.layout)
+        self.widget.setLayout(self.layout)
+
+        #Scroll Area Properties
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setWidgetResizable(True)
+        self.setWidget(self.widget)
+
 
 
     def statistics_UI(self):
@@ -116,31 +129,52 @@ class StatisticsGUI(QWidget):
             - Pie chart
             - Bar chart
         """
-        self.layout = QVBoxLayout()
+        self.widget = QWidget() # Widget that contains the collection of Vertical Box
+        self.window_layout = QVBoxLayout()
 
-        # create the layout for the tables
-        self.table_layout = QHBoxLayout()
-        self.table_layout_func()
+        self.add_widgets()
 
-        self.graphWidget = pg.PlotWidget()
+        self.widget.setLayout(self.window_layout)
 
-        hour = [1,2,3,4,5,6,7,8,9,10]
-        temperature = [30,32,34,32,33,31,29,32,35,45]
+        #Scroll Area Properties
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setWidgetResizable(True)
+        self.setWidget(self.widget)
 
-        # plot data: x, y values
-        self.graphWidget.plot(hour, temperature)
+
+    def add_widgets(self):
+        """
+        This method creates and adds the widgets to the layout of the pop up window
+
+        Intended structure of the statistics window
+            - Table layout: left is info display - right is overview display
+            - Pie chart
+            - Bar chart
+        """
+        # create the widgets
+        self.first_part = QWidget()
+        self.second_part = QWidget()
+
+        # add the content to the widgets. See the methods called in this part below
+        self.first_part_widget()
+        self.second_part_widget()
 
         # add the widgets to the layout
-        self.layout.addLayout(self.table_layout)
-        self.layout.addWidget(self.graphWidget)
-
-        self.setLayout(self.layout)
+        self.window_layout.addWidget(self.first_part)
+        self.window_layout.addWidget(self.second_part)
 
 
-    def table_layout_func(self):
+    def first_part_widget(self):
         """
-        This method creates the table and the content of the table to show the activities timer information
+        This method adds the content for QWidget self.first_part
+
+        This part contains a table layout with 2 label arranged horizontally
         """
+        self.first_part.setMinimumHeight(170)
+
+        # create the layout for the tables
+        table_layout = QHBoxLayout()
 
         # Left table: showing the timer and their contribution
         self.table_display_create()
@@ -149,8 +183,41 @@ class StatisticsGUI(QWidget):
         self.table_overview_create()
 
         # add the tables to the layout
-        self.table_layout.addWidget(self.table_display)
-        self.table_layout.addWidget(self.table_overview)
+        table_layout.addWidget(self.table_display)
+        table_layout.addWidget(self.table_overview)
+
+        self.first_part.setLayout(table_layout)
+
+
+    def second_part_widget(self):
+        """
+        This method adds the content for QWidget self.second_part
+        """
+        self.second_part.setMinimumHeight(400)
+
+        # create the layout for the pie chart
+        pie_chart_layout = QVBoxLayout()
+
+        series = QPieSeries()
+        for activity, timer in self.data_percentage.items():
+            series.append(activity, timer)
+
+        chart = QChart()
+        chart.legend().hide()
+        chart.addSeries(series)
+        chart.createDefaultAxes()
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.setTitle("Pie Chart")
+ 
+        chart.legend().setVisible(True)
+        chart.legend().setAlignment(Qt.AlignBottom)
+ 
+        chartview = QChartView(chart)
+        chartview.setRenderHint(QPainter.Antialiasing)
+
+        pie_chart_layout.addWidget(chartview)
+
+        self.second_part.setLayout(pie_chart_layout)
 
     
     def table_display_create(self):
@@ -164,7 +231,7 @@ class StatisticsGUI(QWidget):
         self.table_display.setRowCount(len(self.data_raw))
         self.table_display.setColumnCount(3)
 
-        self.table_display.setHorizontalHeaderLabels(["Activity", "Timer (s)", "Contribution (%)"])
+        self.table_display.setHorizontalHeaderLabels(["Activity", "Timer (s)", "In Total (%)"])
 
         # add the content for the table
         for i in range(len(self.data_raw)):
@@ -203,7 +270,7 @@ class StatisticsGUI(QWidget):
         min_time = QTableWidgetItem("{:.2f}".format(self.data_raw[self.statistics.min()[0]]))
 
         range_time_list = self.statistics.time_range()
-        range_time_string = "-".join(str(timer_value) for timer_value in range_time_list)
+        range_time_string = "-".join(str(round(timer_value, 2)) for timer_value in range_time_list)
 
         range_time = QTableWidgetItem(range_time_string)
         median_time = QTableWidgetItem("{:.2f}".format(self.statistics.median()))
@@ -232,10 +299,8 @@ class StatisticsGUI(QWidget):
         """
         This method set the windows of the app
         and put it in the center of the screen
-
-        TODO: check when the activities list is empty and deal with that
         """
-        self.resize(400, 400)
+        self.resize(500, 500)
         self.center()
 
         self.setWindowTitle('Statistics Visualization')

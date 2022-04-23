@@ -28,22 +28,6 @@ class HelpGUI(QScrollArea):
     def init_UI(self):
         """
         This method creates a layout for the pop up window
-
-        self.scroll = QScrollArea() # Scroll area which contains everything inside
-        self.widget = QWidget() # Widget that contains the collection of Vertical Box
-        self.window_layout = QVBoxLayout() # the window will arrange the widgets inside it vertically
-
-        self.add_widgets() # add the widgets to the layout. See method add_widgets() below
-
-        self.widget.setLayout(self.window_layout)
-
-        #Scroll Area Properties
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.widget)
-
-        self.setCentralWidget(self.scroll)
         """
         self.widget = QWidget() # Widget that contains the collection of Vertical Box
         self.window_layout = QVBoxLayout() # the window will arrange the widgets inside it vertically
