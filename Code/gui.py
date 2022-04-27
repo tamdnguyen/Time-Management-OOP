@@ -183,8 +183,6 @@ class GUI(QWidget):
         self.restart_btn_widget()
         self.stats_btn.clicked.connect(self.stats_btn_widget)
 
-        # TODO: Create graph and pop up window show Statistics
-
 
     def otherbutton_widget(self, otherbutton_layout):
         """
@@ -267,8 +265,6 @@ class GUI(QWidget):
     def add_activity(self):
         """
         This method shows a pop up windows to ask for the name of the activity and create new activity for the program
-
-        TODO: Fix same name activity
         """
         activity_name, ok = QInputDialog.getText(self, 'Activity Name',
                                         'Enter activity name:')
@@ -363,31 +359,20 @@ class GUI(QWidget):
     def reset_btn_widget(self):
         """
         This method creates the content and adds functionality for the Reset button on the GUI
+
+        TODO: add the message box to confirm. Follow the template of delete_btn_widget
         """
         activities_list = self.dayTask.get_activities()
 
         reset_menu = QMenu(self)
 
         try:
-            reset_activity1_act = QAction(activities_list[0].get_name(), self)
-            reset_activity1_act.triggered.connect(activities_list[0].get_timer().reset)
-            reset_menu.addAction(reset_activity1_act)
+            reset_menu.addAction(activities_list[0].get_name(), lambda: self.reset_activity(activities_list[0]))
+            reset_menu.addAction(activities_list[1].get_name(), lambda: self.reset_activity(activities_list[1]))
+            reset_menu.addAction(activities_list[2].get_name(), lambda: self.reset_activity(activities_list[2]))
+            reset_menu.addAction(activities_list[3].get_name(), lambda: self.reset_activity(activities_list[3]))
+            reset_menu.addAction(activities_list[4].get_name(), lambda: self.reset_activity(activities_list[4]))
 
-            reset_activity2_act = QAction(activities_list[1].get_name(), self)
-            reset_activity2_act.triggered.connect(activities_list[1].get_timer().reset)
-            reset_menu.addAction(reset_activity2_act)
-
-            reset_activity3_act = QAction(activities_list[2].get_name(), self)
-            reset_activity3_act.triggered.connect(activities_list[2].get_timer().reset)
-            reset_menu.addAction(reset_activity3_act)
-
-            reset_activity4_act = QAction(activities_list[3].get_name(), self)
-            reset_activity4_act.triggered.connect(activities_list[3].get_timer().reset)
-            reset_menu.addAction(reset_activity4_act)
-
-            reset_activity5_act = QAction(activities_list[4].get_name(), self)
-            reset_activity5_act.triggered.connect(activities_list[4].get_timer().reset)
-            reset_menu.addAction(reset_activity5_act)
         except IndexError:
             pass
 
@@ -397,31 +382,20 @@ class GUI(QWidget):
     def restart_btn_widget(self):
         """
         This method creates the content and adds functionality for the Restart button on the GUI
+
+        TODO: add the message box to confirm. Follow the template of delete_btn_widget
         """
         activities_list = self.dayTask.get_activities()
 
         restart_menu = QMenu(self)
 
         try:
-            restart_activity1_act = QAction(activities_list[0].get_name(), self)
-            restart_activity1_act.triggered.connect(activities_list[0].get_timer().restart)
-            restart_menu.addAction(restart_activity1_act)
+            restart_menu.addAction(activities_list[0].get_name(), lambda: self.restart_activity(activities_list[0]))
+            restart_menu.addAction(activities_list[1].get_name(), lambda: self.restart_activity(activities_list[1]))
+            restart_menu.addAction(activities_list[2].get_name(), lambda: self.restart_activity(activities_list[2]))
+            restart_menu.addAction(activities_list[3].get_name(), lambda: self.restart_activity(activities_list[3]))
+            restart_menu.addAction(activities_list[4].get_name(), lambda: self.restart_activity(activities_list[4]))
 
-            restart_activity2_act = QAction(activities_list[1].get_name(), self)
-            restart_activity2_act.triggered.connect(activities_list[1].get_timer().restart)
-            restart_menu.addAction(restart_activity2_act)
-
-            restart_activity3_act = QAction(activities_list[2].get_name(), self)
-            restart_activity3_act.triggered.connect(activities_list[2].get_timer().restart)
-            restart_menu.addAction(restart_activity3_act)
-
-            restart_activity4_act = QAction(activities_list[3].get_name(), self)
-            restart_activity4_act.triggered.connect(activities_list[3].get_timer().restart)
-            restart_menu.addAction(restart_activity4_act)
-
-            restart_activity5_act = QAction(activities_list[4].get_name(), self)
-            restart_activity5_act.triggered.connect(activities_list[4].get_timer().restart)
-            restart_menu.addAction(restart_activity5_act)
         except IndexError:
             pass
 
@@ -492,8 +466,6 @@ class GUI(QWidget):
     def more_btn_widget(self):
         """
         This method creates the content and adds functionality for the More button on the GUI
-
-        TODO: Choose Day buttons
         """
         more_menu = QMenu(self)
 
@@ -534,6 +506,44 @@ class GUI(QWidget):
 
         if ok:
             activity.edit_name(activity_name)
+
+
+    def reset_activity(self, activity):
+        """
+        This method resets an activity in the list of activities of the dayTask object.
+
+        Before performing the reset action, it shows a pop up windows to get the confirmation from the user.
+        """
+        confirmation_box = QMessageBox()
+        confirmation_box.setIcon(QMessageBox.Critical)
+        confirmation_box.setWindowTitle("Confirm Activity Timer Reset")
+        confirmation_box.setText("Activities timer can't be recovered after resetting.\nThis action is permanent and can't be undone.")
+        confirmation_box.setInformativeText("Do you want to proceed?")
+        confirmation_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirmation_box.setDefaultButton(QMessageBox.Yes)
+        confirmation = confirmation_box.exec()
+
+        if confirmation == QMessageBox.Yes:
+            activity.get_timer().reset()
+
+
+    def restart_activity(self, activity):
+        """
+        This method resets an activity in the list of activities of the dayTask object.
+
+        Before performing the reset action, it shows a pop up windows to get the confirmation from the user.
+        """
+        confirmation_box = QMessageBox()
+        confirmation_box.setIcon(QMessageBox.Critical)
+        confirmation_box.setWindowTitle("Confirm Activity Timer Restart")
+        confirmation_box.setText("Activities timer can't be recovered after restarting.\nThis action is permanent and can't be undone.")
+        confirmation_box.setInformativeText("Do you want to proceed?")
+        confirmation_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirmation_box.setDefaultButton(QMessageBox.Yes)
+        confirmation = confirmation_box.exec()
+
+        if confirmation == QMessageBox.Yes:
+            activity.get_timer().restart()
 
 
     def delete_activity(self, activity):
