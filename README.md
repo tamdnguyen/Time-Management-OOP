@@ -36,6 +36,8 @@ $ cd Time-Management-OOP
 $ pip install -r requirements.txt
 ```
 
+**Note**: if you are using Linux operating system, you might need to install PyQt5 using the command `sudo apt-get install python3-pyqt5`
+
 ## Usage
 
 #### If you are a GUI type person and would like to use the code editors (Recommended method)
