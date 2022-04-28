@@ -21,8 +21,17 @@ A code editor is not mandatory to run the program, but it is nice to have one. H
 
 In your terminal (command prompt in Windows), change directory to the project folder and run the following commands:
 
+- For TAs and teacher of the course
+
 ```
 $ git clone https://version.aalto.fi/gitlab/nguyent99/time-management-oop.git
+$ cd Time-Management-OOP
+$ pip install -r requirements.txt
+```
+- For other users
+
+```
+$ git clone https://github.com/tamdnguyen/Time-Management-OOP.git
 $ cd Time-Management-OOP
 $ pip install -r requirements.txt
 ```
