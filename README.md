@@ -90,11 +90,13 @@ $ pip install -r requirements.txt
 
 ## User Instructions <a id="user-instructions"></a>
 
-### If you are a GUI type person and would like to use the code editors (Recommended method)
+### If you are a GUI type person and would like to use the code editors (Recommended method):
 
 In your code editor, open the folder `Time-Management-OOP`. In folder `Code`, open and run the file `main.py` to start the program. That's it, enjoy the program.
 
-### If you are a terminal type person
+<br>
+
+### If you are a terminal type person:
 
 In the terminal, `cd` to folder `Time-Management-OOP`. Run the commands below:
 
