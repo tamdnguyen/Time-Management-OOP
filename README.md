@@ -1,6 +1,8 @@
 # Time management OOP
 
-Demo video of the program [here]().
+Demo video of using the program [here](https://drive.google.com/file/d/1QVH-oTRmjlxNso6arwjS1qDMs0lU3OQf/view?usp=sharing).
+
+Video for installation instructions [here](https://drive.google.com/file/d/1fO7vrSXogasl0xaH150uoZU_gDmbMlfI/view?usp=sharing).
 
 ## Table of Content
 
@@ -92,7 +94,7 @@ $ pip install -r requirements.txt
 
 ### If you are a GUI type person and would like to use the code editors (Recommended method):
 
-In your code editor, open the folder `Time-Management-OOP`. In folder `Code`, open and run the file `main.py` to start the program. That's it, enjoy the program.
+In your code editor, open the folder `Time-Management-OOP`. In folder `Code`, open and run the file `main.py` to start the program. That's it, enjoy the program. **NOTE:** open the folder `Time-Management-OOP` inside whatever folder you use to host the whole project, NOT the root folder that you use at the beginning of the installation.
 
 <br>
 
