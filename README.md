@@ -113,6 +113,6 @@ $ python3 Code/main.py
 - PyQt5 GUI tutorial: https://zetcode.com/gui/pyqt5/
 
 
-Last update: 14.06.2022. Course ended with grade 5. Go public!
+Last update: 14.06.2022. Published!
 
 Happy Learning! Cheers!
